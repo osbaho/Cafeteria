@@ -350,6 +350,9 @@
             transform: translateY(-20px);
             transition: all 0.3s;
             z-index: 1000;
+            max-width: 400px;
+            white-space: pre-line;
+            text-align: left;
         }
 
         .notification.show {
@@ -395,19 +398,19 @@
                 <div class="payment-section" id="payment-section" style="display: none;">
                     <h3>Método de Pago</h3>
                     <div class="payment-options">
-                        <div class="payment-option" onclick="selectPayment('efectivo')">
+                        <div class="payment-option" onclick="selectPayment('efectivo', event)" tabindex="0" role="button">
                             <input type="radio" name="payment" id="efectivo" value="efectivo">
                             <label for="efectivo">💵 Efectivo</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('tarjeta')">
+                        <div class="payment-option" onclick="selectPayment('tarjeta', event)" tabindex="0" role="button">
                             <input type="radio" name="payment" id="tarjeta" value="tarjeta">
                             <label for="tarjeta">💳 Tarjeta de Crédito/Débito</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('transferencia')">
+                        <div class="payment-option" onclick="selectPayment('transferencia', event)" tabindex="0" role="button">
                             <input type="radio" name="payment" id="transferencia" value="transferencia">
                             <label for="transferencia">🏦 Transferencia Bancaria</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('contra')">
+                        <div class="payment-option" onclick="selectPayment('contra', event)" tabindex="0" role="button">
                             <input type="radio" name="payment" id="contra" value="contra">
                             <label for="contra">🔄 Contra Virtual</label>
                         </div>
@@ -593,12 +596,12 @@
         }
 
         // Select payment method
-        function selectPayment(method) {
+        function selectPayment(method, event) {
             selectedPayment = method;
             document.querySelectorAll('.payment-option').forEach(option => {
                 option.classList.remove('selected');
             });
-            event.target.closest('.payment-option').classList.add('selected');
+            event.currentTarget.classList.add('selected');
             document.getElementById(method).checked = true;
             document.getElementById('checkout-btn').disabled = false;
         }
@@ -615,13 +618,14 @@
                 contra: 'Contra Virtual'
             };
 
-            alert(
+            // Show custom confirmation message
+            const confirmationMsg = 
                 `¡Pedido Confirmado! 🎉\n\n` +
                 `Total: $${total.toLocaleString()}\n` +
                 `Método de pago: ${paymentNames[selectedPayment]}\n\n` +
-                `Tu pedido se está procesando.\n` +
-                `Recibirás una confirmación pronto.`
-            );
+                `Tu pedido se está procesando.\nRecibirás una confirmación pronto.`;
+            
+            showNotification(confirmationMsg, 4000);
 
             // Reset cart
             cart = [];
@@ -636,13 +640,13 @@
         }
 
         // Show notification
-        function showNotification(message) {
+        function showNotification(message, duration = 2000) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.classList.add('show');
             setTimeout(() => {
                 notification.classList.remove('show');
-            }, 2000);
+            }, duration);
         }
 
         // Initialize on page load
