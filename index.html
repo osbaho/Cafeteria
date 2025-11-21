@@ -332,6 +332,97 @@
         }
 
         /* ============================================
+           PAYMENT FORMS
+           ============================================ */
+        .payment-form {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 2px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .payment-form.active {
+            display: block;
+        }
+
+        .payment-form h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+        }
+
+        .bank-info {
+            background: #f0f4ff;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .bank-info p {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .bank-info strong {
+            color: #667eea;
+        }
+
+        .balance-display {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .balance-display .balance-amount {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .balance-display .balance-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* ============================================
            CHECKOUT BUTTON
            ============================================ */
         .checkout-btn {
@@ -401,6 +492,231 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* ============================================
+           CUSTOMIZATION MODAL
+           ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            margin-bottom: 5px;
+            font-size: 1.8em;
+        }
+
+        .modal-header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .ingredient-item,
+        .addition-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.3s;
+        }
+
+        .ingredient-item:hover,
+        .addition-item:hover {
+            background: #e9ecef;
+        }
+
+        .ingredient-item.required {
+            background: #e6eeff;
+            border: 2px solid #667eea;
+        }
+
+        .ingredient-left,
+        .addition-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .ingredient-checkbox,
+        .addition-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .ingredient-checkbox:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .ingredient-name,
+        .addition-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .ingredient-badge {
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .ingredient-price,
+        .addition-price {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .ingredient-price.discount {
+            color: #28a745;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            background: #f8f9fa;
+            border-radius: 0 0 20px 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .price-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .price-summary .label {
+            color: #666;
+        }
+
+        .price-summary.total {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-cancel,
+        .btn-add-to-cart {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background: #dee2e6;
+        }
+
+        .btn-add-to-cart {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -457,52 +773,285 @@
                             <label for="contra">🔄 Virtual Account</label>
                         </div>
                     </div>
+
+                    <!-- Payment Forms -->
+                    <div id="payment-forms">
+                        <!-- Cash Payment Form -->
+                        <div class="payment-form" id="form-efectivo">
+                            <h4>💵 Cash Payment</h4>
+                            <p style="color: #666;">You can pay in cash when you pick up your order.</p>
+                            <div class="bank-info">
+                                <p><strong>Instructions:</strong></p>
+                                <p>• Have the exact amount ready</p>
+                                <p>• Show this order number when picking up</p>
+                                <p>• Payment desk is at the main entrance</p>
+                            </div>
+                        </div>
+
+                        <!-- Card Payment Form -->
+                        <div class="payment-form" id="form-tarjeta">
+                            <h4>💳 Card Payment</h4>
+                            <div class="form-group">
+                                <label for="card-number">Card Number</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                            </div>
+                            <div class="form-group">
+                                <label for="card-name">Cardholder Name</label>
+                                <input type="text" id="card-name" placeholder="Name as shown on card">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-expiry">Expiry Date</label>
+                                    <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="card-cvv">CVV</label>
+                                    <input type="text" id="card-cvv" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bank Transfer Form -->
+                        <div class="payment-form" id="form-transferencia">
+                            <h4>🏦 Bank Transfer</h4>
+                            <p style="color: #666; margin-bottom: 10px;">Transfer the total amount to our bank account:</p>
+                            <div class="bank-info">
+                                <p><strong>Bank:</strong> Banco Virtual</p>
+                                <p><strong>Account Number:</strong> 1234-5678-9012-3456</p>
+                                <p><strong>Account Type:</strong> Savings</p>
+                                <p><strong>Account Holder:</strong> Cafetería Virtual SAS</p>
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label for="transfer-reference">Transfer Reference Number</label>
+                                <input type="text" id="transfer-reference" placeholder="Enter your transfer reference">
+                            </div>
+                        </div>
+
+                        <!-- Virtual Account Form -->
+                        <div class="payment-form" id="form-contra">
+                            <h4>🔄 Virtual Account</h4>
+                            <div class="balance-display">
+                                <div class="balance-amount" id="virtual-balance">$0</div>
+                                <div class="balance-label">Available Balance</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="virtual-pin">Account PIN</label>
+                                <input type="password" id="virtual-pin" placeholder="Enter your 4-digit PIN" maxlength="4">
+                            </div>
+                            <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                                💡 Your balance will be automatically deducted after confirming the order.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <button class="checkout-btn" id="checkout-btn" onclick="checkout()" disabled>
                     Complete Order
                 </button>
-                </aside>
+            </aside>
         </div>
     </div>
 
+    <!-- Customization Modal -->
+    <div class="modal-overlay" id="customization-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-product-name">Product Name</h2>
+                <p id="modal-product-description">Product description</p>
+                <button class="modal-close" onclick="closeCustomizationModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Ingredients Section -->
+                <div class="modal-section">
+                    <h3>🍽️ Ingredients</h3>
+                    <div id="modal-ingredients-list"></div>
+                </div>
+
+                <!-- Additions Section -->
+                <div class="modal-section" id="additions-section">
+                    <h3>➕ Add Extras</h3>
+                    <div id="modal-additions-list"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="price-summary">
+                    <span class="label">Base Price:</span>
+                    <span id="modal-base-price">$0</span>
+                </div>
+                <div class="price-summary">
+                    <span class="label">Adjustments:</span>
+                    <span id="modal-adjustments">$0</span>
+                </div>
+                <div class="price-summary total">
+                    <span class="label">Total:</span>
+                    <span id="modal-total-price">$0</span>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-cancel" onclick="closeCustomizationModal()">Cancel</button>
+                    <button class="btn-add-to-cart" onclick="confirmCustomization()">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
-        // Product catalog
+        // Product catalog with detailed ingredients and additions
         const products = {
             bebidas: [
-                { id: 1, name: 'Americano Coffee', description: 'Premium black coffee', price: 2500 },
-                { id: 2, name: 'Latte', description: 'Espresso with steamed milk', price: 3500 },
-                { id: 3, name: 'Cappuccino', description: 'Espresso, milk and foam', price: 3500 },
-                { id: 4, name: 'Natural Juice', description: 'Orange, blackberry or mango', price: 4000 },
-                { id: 5, name: 'Iced Tea', description: 'Cold tea with lemon', price: 3000 },
-                { id: 6, name: 'Hot Chocolate', description: 'Premium chocolate with cream', price: 4000 }
+                { 
+                    id: 1, 
+                    name: 'Americano Coffee', 
+                    description: 'Premium black coffee made with high-quality beans', 
+                    price: 2.50,
+                    ingredients: [
+                        { name: 'Coffee', required: true, removable: false, discount: 0 },
+                        { name: 'Sugar', required: false, removable: true, discount: 0 }
+                    ],
+                    additions: [
+                        { name: 'Extra shot', price: 0.75 },
+                        { name: 'Vanilla syrup', price: 0.50 },
+                        { name: 'Caramel syrup', price: 0.50 }
+                    ]
+                },
+                { 
+                    id: 2, 
+                    name: 'Latte', 
+                    description: 'Espresso with steamed milk and foam', 
+                    price: 3.75,
+                    ingredients: [
+                        { name: 'Espresso', required: true, removable: false, discount: 0 },
+                        { name: 'Milk', required: true, removable: false, discount: 0 },
+                        { name: 'Foam', required: false, removable: true, discount: 0.25 }
+                    ],
+                    additions: [
+                        { name: 'Extra shot', price: 0.75 },
+                        { name: 'Vanilla syrup', price: 0.50 },
+                        { name: 'Almond milk', price: 0.75 }
+                    ]
+                },
+                { 
+                    id: 3, 
+                    name: 'Cappuccino', 
+                    description: 'Espresso, milk and thick foam', 
+                    price: 3.50,
+                    ingredients: [
+                        { name: 'Espresso', required: true, removable: false, discount: 0 },
+                        { name: 'Milk', required: true, removable: false, discount: 0 },
+                        { name: 'Cinnamon powder', required: false, removable: true, discount: 0.15 }
+                    ],
+                    additions: [
+                        { name: 'Extra shot', price: 0.75 },
+                        { name: 'Chocolate powder', price: 0.35 }
+                    ]
+                }
             ],
             alimentos: [
-                { id: 7, name: 'Chicken Sandwich', description: 'Chicken, lettuce, tomato, cheese', price: 7500 },
-                { id: 8, name: 'Hamburger', description: 'Beef, cheese, vegetables', price: 9000 },
-                { id: 9, name: 'Caesar Salad', description: 'Lettuce, chicken, parmesan', price: 8500 },
-                { id: 10, name: 'Vegetarian Wrap', description: 'Roasted vegetables and hummus', price: 7000 },
-                { id: 11, name: 'Personal Pizza', description: 'Cheese and tomato', price: 10000 },
-                { id: 12, name: 'Pasta Carbonara', description: 'Pasta with cream sauce', price: 11000 }
+                { 
+                    id: 7, 
+                    name: 'Chicken Sandwich', 
+                    description: 'Grilled chicken breast with fresh vegetables', 
+                    price: 8.50,
+                    ingredients: [
+                        { name: 'Bread', required: true, removable: false, discount: 0 },
+                        { name: 'Chicken breast', required: true, removable: false, discount: 0 },
+                        { name: 'Lettuce', required: false, removable: true, discount: 0.50 },
+                        { name: 'Tomato', required: false, removable: true, discount: 0.50 },
+                        { name: 'Cheese', required: false, removable: true, discount: 0.75 },
+                        { name: 'Mayo', required: false, removable: true, discount: 0.25 }
+                    ],
+                    additions: [
+                        { name: 'Bacon', price: 1.50 },
+                        { name: 'Extra cheese', price: 0.75 },
+                        { name: 'Avocado', price: 1.25 }
+                    ]
+                },
+                { 
+                    id: 8, 
+                    name: 'Hamburger', 
+                    description: 'Beef patty with cheese and fresh vegetables', 
+                    price: 10.00,
+                    ingredients: [
+                        { name: 'Bread', required: true, removable: false, discount: 0 },
+                        { name: 'Beef patty', required: true, removable: false, discount: 0 },
+                        { name: 'Cheese', required: false, removable: true, discount: 0.75 },
+                        { name: 'Lettuce', required: false, removable: true, discount: 0.50 },
+                        { name: 'Tomato', required: false, removable: true, discount: 0.50 },
+                        { name: 'Onion', required: false, removable: true, discount: 0.25 },
+                        { name: 'Pickles', required: false, removable: true, discount: 0.25 }
+                    ],
+                    additions: [
+                        { name: 'Bacon', price: 1.50 },
+                        { name: 'Extra patty', price: 3.00 },
+                        { name: 'Fried egg', price: 1.00 }
+                    ]
+                },
+                { 
+                    id: 11, 
+                    name: 'Personal Pizza', 
+                    description: 'Individual pizza with cheese and tomato sauce', 
+                    price: 12.00,
+                    ingredients: [
+                        { name: 'Dough', required: true, removable: false, discount: 0 },
+                        { name: 'Tomato sauce', required: true, removable: false, discount: 0 },
+                        { name: 'Mozzarella cheese', required: true, removable: false, discount: 0 },
+                        { name: 'Oregano', required: false, removable: true, discount: 0.15 }
+                    ],
+                    additions: [
+                        { name: 'Pepperoni', price: 2.00 },
+                        { name: 'Mushrooms', price: 1.25 },
+                        { name: 'Ham', price: 1.50 },
+                        { name: 'Bell peppers', price: 1.00 }
+                    ]
+                }
             ],
             postres: [
-                { id: 13, name: 'Brownie', description: 'Chocolate with walnuts', price: 3500 },
-                { id: 14, name: 'Cheesecake', description: 'Cheese tart with berries', price: 4500 },
-                { id: 15, name: 'Cookies', description: 'Chocolate cookies (3 units)', price: 2500 },
-                { id: 16, name: 'Muffin', description: 'Blueberry muffin', price: 3000 },
-                { id: 17, name: 'Tiramisu', description: 'Traditional Italian dessert', price: 5000 },
-                { id: 18, name: 'Ice Cream', description: 'Two scoops of your choice', price: 4000 }
+                { 
+                    id: 13, 
+                    name: 'Brownie', 
+                    description: 'Chocolate brownie with walnuts', 
+                    price: 4.50,
+                    ingredients: [
+                        { name: 'Brownie base', required: true, removable: false, discount: 0 },
+                        { name: 'Walnuts', required: false, removable: true, discount: 0.50 },
+                        { name: 'Chocolate chips', required: false, removable: true, discount: 0.35 }
+                    ],
+                    additions: [
+                        { name: 'Vanilla ice cream', price: 1.50 },
+                        { name: 'Chocolate sauce', price: 0.50 }
+                    ]
+                },
+                { 
+                    id: 14, 
+                    name: 'Cheesecake', 
+                    description: 'Cream cheese tart with berry topping', 
+                    price: 5.50,
+                    ingredients: [
+                        { name: 'Cheese base', required: true, removable: false, discount: 0 },
+                        { name: 'Graham crust', required: true, removable: false, discount: 0 },
+                        { name: 'Berry topping', required: false, removable: true, discount: 0.75 }
+                    ],
+                    additions: [
+                        { name: 'Whipped cream', price: 0.50 },
+                        { name: 'Extra berries', price: 1.00 }
+                    ]
+                }
             ]
         };
 
         // Shopping cart
         let cart = [];
         let selectedPayment = null;
+        let virtualAccountBalance = 50.00; // Virtual account balance in USD
 
         // Initialize the page
         function init() {
             renderProducts();
             updateCart();
+            updateVirtualBalance();
         }
 
         // Render all products
@@ -562,20 +1111,211 @@
             }
         }
 
-        // Add product to cart
+        // Add product to cart (now opens customization modal)
+        let currentCustomization = null;
+
         function addToCart(productId) {
             const product = findProductById(productId);
             if (!product) return;
+            
+            // Open customization modal
+            openCustomizationModal(product);
+        }
 
-            const cartItem = cart.find(item => item.id === productId);
-            if (cartItem) {
-                cartItem.quantity++;
+        // Open customization modal
+        function openCustomizationModal(product) {
+            currentCustomization = {
+                product: product,
+                selectedIngredients: product.ingredients.map(ing => ({ ...ing, selected: true })),
+                selectedAdditions: product.additions.map(add => ({ ...add, selected:false }))
+            };
+
+            // Populate modal with product info
+            document.getElementById('modal-product-name').textContent = product.name;
+            document.getElementById('modal-product-description').textContent = product.description;
+            document.getElementById('modal-base-price').textContent = `$${product.price.toLocaleString()}`;
+
+            // Render ingredients
+            const ingredientsList = document.getElementById('modal-ingredients-list');
+            ingredientsList.innerHTML = '';
+            
+            currentCustomization.selectedIngredients.forEach((ing, index) => {
+                const item = document.createElement('div');
+                item.className = 'ingredient-item' + (ing.required ? ' required' : '');
+                
+                const left = document.createElement('div');
+                left.className = 'ingredient-left';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'ingredient-checkbox';
+                checkbox.checked = ing.selected;
+                checkbox.disabled = ing.required;
+                checkbox.onchange = (e) => {
+                    currentCustomization.selectedIngredients[index].selected = e.target.checked;
+                    updateModalPrices();
+                };
+                
+                const name = document.createElement('span');
+                name.className = 'ingredient-name';
+                name.textContent = ing.name;
+                
+                left.appendChild(checkbox);
+                left.appendChild(name);
+                
+                if (ing.required) {
+                    const badge = document.createElement('span');
+                    badge.className = 'ingredient-badge';
+                    badge.textContent = 'REQUIRED';
+                    left.appendChild(badge);
+                }
+                
+                const priceSpan = document.createElement('span');
+                priceSpan.className = 'ingredient-price' + (ing.discount > 0 ? ' discount' : '');
+                if (ing.discount > 0) {
+                    priceSpan.textContent = `-$${ing.discount.toLocaleString()}`;
+                }
+                
+                item.appendChild(left);
+                if (ing.discount > 0) {
+                    item.appendChild(priceSpan);
+                }
+                
+                ingredientsList.appendChild(item);
+            });
+
+            // Render additions
+            const additionsList = document.getElementById('modal-additions-list');
+            additionsList.innerHTML = '';
+            
+            if (currentCustomization.selectedAdditions.length > 0) {
+                currentCustomization.selectedAdditions.forEach((add, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'addition-item';
+                    
+                    const left = document.createElement('div');
+                    left.className = 'addition-left';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'addition-checkbox';
+                    checkbox.checked = add.selected;
+                    checkbox.onchange = (e) => {
+                        currentCustomization.selectedAdditions[index].selected = e.target.checked;
+                        updateModalPrices();
+                    };
+                    
+                    const name = document.createElement('span');
+                    name.className = 'addition-name';
+                    name.textContent = add.name;
+                    
+                    left.appendChild(checkbox);
+                    left.appendChild(name);
+                    
+                    const priceSpan = document.createElement('span');
+                    priceSpan.className = 'addition-price';
+                    priceSpan.textContent = `+$${add.price.toLocaleString()}`;
+                    
+                    item.appendChild(left);
+                    item.appendChild(priceSpan);
+                    
+                    additionsList.appendChild(item);
+                });
+                
+                document.getElementById('additions-section').style.display = 'block';
             } else {
-                cart.push({ ...product, quantity: 1 });
+                document.getElementById('additions-section').style.display = 'none';
             }
 
+            updateModalPrices();
+            document.getElementById('customization-modal').classList.add('show');
+        }
+
+        // Update modal prices
+        function updateModalPrices() {
+            if (!currentCustomization) return;
+
+            let adjustment = 0;
+
+            // Calculate ingredient discounts
+            currentCustomization.selectedIngredients.forEach(ing => {
+                if (!ing.selected && ing.removable && ing.discount > 0) {
+                    adjustment -= ing.discount;
+                }
+            });
+
+            // Calculate addition extras
+            currentCustomization.selectedAdditions.forEach(add => {
+                if (add.selected) {
+                    adjustment += add.price;
+                }
+            });
+
+            const basePrice = currentCustomization.product.price;
+            const totalPrice = basePrice + adjustment;
+
+            const adjustmentColor = adjustment >= 0 ? '#667eea' : '#28a745';
+            const adjustmentSign = adjustment >= 0 ? '+' : '';
+
+            document.getElementById('modal-adjustments').textContent = `${adjustmentSign}$${adjustment.toLocaleString()}`;
+            document.getElementById('modal-adjustments').style.color = adjustmentColor;
+            document.getElementById('modal-total-price').textContent = `$${totalPrice.toLocaleString()}`;
+        }
+
+        // Close customization modal
+        function closeCustomizationModal() {
+            document.getElementById('customization-modal').classList.remove('show');
+            currentCustomization = null;
+        }
+
+        // Confirm customization and add to cart
+        function confirmCustomization() {
+            if (!currentCustomization) return;
+
+            // Calculate final price
+            let finalPrice = currentCustomization.product.price;
+            
+            currentCustomization.selectedIngredients.forEach(ing => {
+                if (!ing.selected && ing.removable && ing.discount > 0) {
+                    finalPrice -= ing.discount;
+                }
+            });
+            
+            currentCustomization.selectedAdditions.forEach(add => {
+                if (add.selected) {
+                    finalPrice += add.price;
+                }
+            });
+
+            // Create cart item with customization
+            const cartItem = {
+                id: Date.now(), // Use timestamp for unique ID per customization
+                productId: currentCustomization.product.id,
+                name: currentCustomization.product.name,
+                price: finalPrice,
+                originalPrice: currentCustomization.product.price,
+                quantity: 1,
+                customization: {
+                    ingredients: currentCustomization.selectedIngredients.filter(ing => ing.selected).map(ing => ing.name),
+                    additions: currentCustomization.selectedAdditions.filter(add => add.selected).map(add => add.name)
+                }
+            };
+
+            // Check if same customized product exists
+            const existingItem = cart.find(item => 
+                item.productId === cartItem.productId && 
+                JSON.stringify(item.customization) === JSON.stringify(cartItem.customization)
+            );
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push(cartItem);
+            }
+
+            showNotification(`✅ ${currentCustomization.product.name} added to cart!`, 2000);
             updateCart();
-            showNotification(`${product.name} added to cart`);
+            closeCustomizationModal();
         }
 
         // Find product by ID
@@ -701,11 +1441,26 @@
         // Select payment method
         function selectPayment(method, event) {
             selectedPayment = method;
+            
+            // Update visual selection
             document.querySelectorAll('.payment-option').forEach(option => {
                 option.classList.remove('selected');
             });
             event.currentTarget.classList.add('selected');
             document.getElementById(method).checked = true;
+            
+            // Hide all payment forms
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Show selected payment form
+            const selectedForm = document.getElementById(`form-${method}`);
+            if (selectedForm) {
+                selectedForm.classList.add('active');
+            }
+            
+            // Enable checkout button
             document.getElementById('checkout-btn').disabled = false;
         }
 
@@ -717,9 +1472,69 @@
             }
         }
 
+        // Update virtual balance display
+        function updateVirtualBalance() {
+            const balanceElement = document.getElementById('virtual-balance');
+            if (balanceElement) {
+                balanceElement.textContent = `$${virtualAccountBalance.toLocaleString()}`;
+            }
+        }
+
+        // Validate payment details
+        function validatePaymentDetails() {
+            if (!selectedPayment) return false;
+
+            switch(selectedPayment) {
+                case 'tarjeta':
+                    const cardNumber = document.getElementById('card-number').value.trim();
+                    const cardName = document.getElementById('card-name').value.trim();
+                    const cardExpiry = document.getElementById('card-expiry').value.trim();
+                    const cardCvv = document.getElementById('card-cvv').value.trim();
+                    
+                    if (!cardNumber || !cardName || !cardExpiry || !cardCvv) {
+                        showNotification('❌ Please complete all card details', 3000);
+                        return false;
+                    }
+                    break;
+
+                case 'transferencia':
+                    const transferRef = document.getElementById('transfer-reference').value.trim();
+                    if (!transferRef) {
+                        showNotification('❌ Please enter your transfer reference number', 3000);
+                        return false;
+                    }
+                    break;
+
+                case 'contra':
+                    const pin = document.getElementById('virtual-pin').value.trim();
+                    if (!pin || pin.length !== 4) {
+                        showNotification('❌ Please enter a valid 4-digit PIN', 3000);
+                        return false;
+                    }
+                    
+                    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    if (total > virtualAccountBalance) {
+                        showNotification('❌ Insufficient balance in virtual account', 3000);
+                        return false;
+                    }
+                    break;
+
+                case 'efectivo':
+                    // Cash doesn't need validation
+                    break;
+            }
+
+            return true;
+        }
+
         // Checkout
         function checkout() {
             if (cart.length === 0 || !selectedPayment) return;
+
+            // Validate payment details
+            if (!validatePaymentDetails()) {
+                return;
+            }
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const paymentNames = {
@@ -728,6 +1543,12 @@
                 transferencia: 'Transfer',
                 contra: 'Virtual Account'
             };
+
+            // Deduct from virtual account if that payment method was used
+            if (selectedPayment === 'contra') {
+                virtualAccountBalance -= total;
+                updateVirtualBalance();
+            }
 
             // Show custom confirmation message
             const confirmationMsg = 
@@ -738,7 +1559,7 @@
             
             showNotification(confirmationMsg, 4000);
 
-            // Reset cart
+            // Reset cart and forms
             cart = [];
             selectedPayment = null;
             document.querySelectorAll('.payment-option').forEach(option => {
@@ -747,6 +1568,20 @@
             document.querySelectorAll('input[name="payment"]').forEach(input => {
                 input.checked = false;
             });
+            
+            // Hide all payment forms
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Clear form inputs
+            document.getElementById('card-number').value = '';
+            document.getElementById('card-name').value = '';
+            document.getElementById('card-expiry').value = '';
+            document.getElementById('card-cvv').value = '';
+            document.getElementById('transfer-reference').value = '';
+            document.getElementById('virtual-pin').value = '';
+            
             updateCart();
         }
 
