@@ -398,19 +398,19 @@
                 <div class="payment-section" id="payment-section" style="display: none;">
                     <h3>Método de Pago</h3>
                     <div class="payment-options">
-                        <div class="payment-option" onclick="selectPayment('efectivo', event)" tabindex="0" role="button">
+                        <div class="payment-option" onclick="selectPayment('efectivo', event)" onkeydown="handlePaymentKeydown('efectivo', event)" tabindex="0" role="button" aria-label="Seleccionar pago en efectivo">
                             <input type="radio" name="payment" id="efectivo" value="efectivo">
                             <label for="efectivo">💵 Efectivo</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('tarjeta', event)" tabindex="0" role="button">
+                        <div class="payment-option" onclick="selectPayment('tarjeta', event)" onkeydown="handlePaymentKeydown('tarjeta', event)" tabindex="0" role="button" aria-label="Seleccionar pago con tarjeta">
                             <input type="radio" name="payment" id="tarjeta" value="tarjeta">
                             <label for="tarjeta">💳 Tarjeta de Crédito/Débito</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('transferencia', event)" tabindex="0" role="button">
+                        <div class="payment-option" onclick="selectPayment('transferencia', event)" onkeydown="handlePaymentKeydown('transferencia', event)" tabindex="0" role="button" aria-label="Seleccionar pago con transferencia bancaria">
                             <input type="radio" name="payment" id="transferencia" value="transferencia">
                             <label for="transferencia">🏦 Transferencia Bancaria</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('contra', event)" tabindex="0" role="button">
+                        <div class="payment-option" onclick="selectPayment('contra', event)" onkeydown="handlePaymentKeydown('contra', event)" tabindex="0" role="button" aria-label="Seleccionar pago con contra virtual">
                             <input type="radio" name="payment" id="contra" value="contra">
                             <label for="contra">🔄 Contra Virtual</label>
                         </div>
@@ -457,6 +457,13 @@
         let cart = [];
         let selectedPayment = null;
 
+        // Sanitize HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // Initialize the page
         function init() {
             renderProducts();
@@ -489,8 +496,8 @@
                     const productCard = document.createElement('div');
                     productCard.className = 'product-card';
                     productCard.innerHTML = `
-                        <h3>${product.name}</h3>
-                        <p>${product.description}</p>
+                        <h3>${escapeHtml(product.name)}</h3>
+                        <p>${escapeHtml(product.description)}</p>
                         <div class="product-price">$${product.price.toLocaleString()}</div>
                         <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
                             Agregar al Carrito
@@ -572,7 +579,7 @@
                     cartItemDiv.className = 'cart-item';
                     cartItemDiv.innerHTML = `
                         <div class="cart-item-info">
-                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-name">${escapeHtml(item.name)}</div>
                             <div class="cart-item-price">$${item.price.toLocaleString()} c/u</div>
                         </div>
                         <div class="cart-item-controls">
@@ -604,6 +611,14 @@
             event.currentTarget.classList.add('selected');
             document.getElementById(method).checked = true;
             document.getElementById('checkout-btn').disabled = false;
+        }
+
+        // Handle keyboard events for payment options
+        function handlePaymentKeydown(method, event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                selectPayment(method, event);
+            }
         }
 
         // Checkout
