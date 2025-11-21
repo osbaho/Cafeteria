@@ -83,15 +83,14 @@ rm -rf .git
 # 3. Initialize new repository
 git init
 git add .
-git commit -m "Initial commit - Complete cafeteria application
-
-Features:
-- Product catalog (beverages, food, desserts)
-- Interactive shopping cart
-- Multiple payment methods
-- Responsive design
-- Enterprise-level XSS security
-- WCAG 2.1 AA accessibility compliance"
+git commit -m "Initial commit - Complete cafeteria application" \
+         -m "Features:" \
+         -m "- Product catalog (beverages, food, desserts)" \
+         -m "- Interactive shopping cart" \
+         -m "- Multiple payment methods" \
+         -m "- Responsive design" \
+         -m "- Enterprise-level XSS security" \
+         -m "- WCAG 2.1 AA accessibility compliance"
 
 # 4. Push to new repository
 git remote add origin https://github.com/osbaho/Cafeteria-clean.git
