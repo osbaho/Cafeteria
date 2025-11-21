@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +8,10 @@
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Cafetería Virtual - Pedidos Online</title>
+    <title>Virtual Cafeteria - Online Orders</title>
     <style>
         /* ============================================
-           RESET Y ESTILOS GLOBALES
+           RESET AND GLOBAL STYLES
            ============================================ */
         * {
             margin: 0;
@@ -27,7 +27,7 @@
         }
 
         /* ============================================
-           CONTENEDOR PRINCIPAL
+           MAIN CONTAINER
            ============================================ */
         .container {
             max-width: 1200px;
@@ -39,7 +39,7 @@
         }
 
         /* ============================================
-           HEADER / ENCABEZADO
+           HEADER
            ============================================ */
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -59,7 +59,7 @@
         }
 
         /* ============================================
-           DISEÑO PRINCIPAL - GRID
+           MAIN LAYOUT - GRID
            ============================================ */
         .main-content {
             display: grid;
@@ -69,7 +69,7 @@
         }
 
         /* ============================================
-           SECCIÓN DE PRODUCTOS
+           PRODUCTS SECTION
            ============================================ */
         .products-section {
             display: grid;
@@ -97,7 +97,7 @@
             margin-top: 15px;
         }
 
-        /* Tarjetas de Productos */
+        /* Product Cards */
         .product-card {
             background: white;
             border-radius: 10px;
@@ -131,7 +131,7 @@
             margin-bottom: 10px;
         }
 
-        /* Botón Agregar al Carrito */
+        /* Add to Cart Button */
         .add-to-cart-btn {
             width: 100%;
             padding: 10px;
@@ -149,7 +149,7 @@
         }
 
         /* ============================================
-           SECCIÓN DEL CARRITO
+           CART SECTION
            ============================================ */
         .cart-section {
             background: #f8f9fa;
@@ -168,7 +168,7 @@
             padding-bottom: 10px;
         }
 
-        /* Items del Carrito */
+        /* Cart Items */
         .cart-items {
             max-height: 400px;
             overflow-y: auto;
@@ -246,7 +246,7 @@
             background: #c82333;
         }
 
-        /* Estado Vacío del Carrito */
+        /* Empty Cart State */
         .cart-empty {
             text-align: center;
             color: #999;
@@ -254,7 +254,7 @@
         }
 
         /* ============================================
-           TOTALES Y RESUMEN
+           TOTALS AND SUMMARY
            ============================================ */
         .cart-total {
             background: white;
@@ -280,7 +280,7 @@
         }
 
         /* ============================================
-           MÉTODOS DE PAGO
+           PAYMENT METHODS
            ============================================ */
         .payment-section {
             background: white;
@@ -332,7 +332,7 @@
         }
 
         /* ============================================
-           BOTÓN DE FINALIZAR PEDIDO
+           CHECKOUT BUTTON
            ============================================ */
         .checkout-btn {
             width: 100%;
@@ -377,7 +377,7 @@
         }
 
         /* ============================================
-           NOTIFICACIONES
+           NOTIFICATIONS
            ============================================ */
         .notification {
             position: fixed;
@@ -408,8 +408,8 @@
 
     <div class="container">
         <header>
-            <h1>🍽️ Cafetería Virtual</h1>
-            <p>Haz tu pedido online - Rápido y fácil</p>
+            <h1>🍽️ Virtual Cafeteria</h1>
+            <p>Place your order online - Fast and easy</p>
         </header>
 
         <div class="main-content">
@@ -417,12 +417,12 @@
                 <!-- Products will be loaded here by JavaScript -->
             </main>
 
-            <aside class="cart-section" role="complementary" aria-label="Carrito de compras">
-                <h2>🛒 Tu Pedido</h2>
+            <aside class="cart-section" role="complementary" aria-label="Shopping cart">
+                <h2>🛒 Your Order</h2>
                 <div class="cart-items" id="cart-items">
                     <div class="cart-empty">
-                        Tu carrito está vacío<br>
-                        ¡Agrega productos para comenzar!
+                        Your cart is empty<br>
+                        Add products to get started!
                     </div>
                 </div>
 
@@ -438,29 +438,29 @@
                 </div>
 
                 <div class="payment-section" id="payment-section" style="display: none;">
-                    <h3>Método de Pago</h3>
+                    <h3>Payment Method</h3>
                     <div class="payment-options">
-                        <div class="payment-option" onclick="selectPayment('efectivo', event)" onkeydown="handlePaymentKeydown('efectivo', event)" tabindex="0" role="button" aria-label="Seleccionar pago en efectivo">
+                        <div class="payment-option" onclick="selectPayment('efectivo', event)" onkeydown="handlePaymentKeydown('efectivo', event)" tabindex="0" role="button" aria-label="Select cash payment">
                             <input type="radio" name="payment" id="efectivo" value="efectivo" tabindex="-1">
-                            <label for="efectivo">💵 Efectivo</label>
+                            <label for="efectivo">💵 Cash</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('tarjeta', event)" onkeydown="handlePaymentKeydown('tarjeta', event)" tabindex="0" role="button" aria-label="Seleccionar pago con tarjeta">
+                        <div class="payment-option" onclick="selectPayment('tarjeta', event)" onkeydown="handlePaymentKeydown('tarjeta', event)" tabindex="0" role="button" aria-label="Select card payment">
                             <input type="radio" name="payment" id="tarjeta" value="tarjeta" tabindex="-1">
-                            <label for="tarjeta">💳 Tarjeta de Crédito/Débito</label>
+                            <label for="tarjeta">💳 Credit/Debit Card</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('transferencia', event)" onkeydown="handlePaymentKeydown('transferencia', event)" tabindex="0" role="button" aria-label="Seleccionar pago con transferencia bancaria">
+                        <div class="payment-option" onclick="selectPayment('transferencia', event)" onkeydown="handlePaymentKeydown('transferencia', event)" tabindex="0" role="button" aria-label="Select bank transfer payment">
                             <input type="radio" name="payment" id="transferencia" value="transferencia" tabindex="-1">
-                            <label for="transferencia">🏦 Transferencia Bancaria</label>
+                            <label for="transferencia">🏦 Bank Transfer</label>
                         </div>
-                        <div class="payment-option" onclick="selectPayment('contra', event)" onkeydown="handlePaymentKeydown('contra', event)" tabindex="0" role="button" aria-label="Seleccionar pago con contra virtual">
+                        <div class="payment-option" onclick="selectPayment('contra', event)" onkeydown="handlePaymentKeydown('contra', event)" tabindex="0" role="button" aria-label="Select virtual account payment">
                             <input type="radio" name="payment" id="contra" value="contra" tabindex="-1">
-                            <label for="contra">🔄 Contra Virtual</label>
+                            <label for="contra">🔄 Virtual Account</label>
                         </div>
                     </div>
                 </div>
 
                 <button class="checkout-btn" id="checkout-btn" onclick="checkout()" disabled>
-                    Finalizar Pedido
+                    Complete Order
                 </button>
                 </aside>
         </div>
@@ -470,28 +470,28 @@
         // Product catalog
         const products = {
             bebidas: [
-                { id: 1, name: 'Café Americano', description: 'Café negro de grano premium', price: 2500 },
-                { id: 2, name: 'Café Latte', description: 'Espresso con leche vaporizada', price: 3500 },
-                { id: 3, name: 'Cappuccino', description: 'Espresso, leche y espuma', price: 3500 },
-                { id: 4, name: 'Jugo Natural', description: 'Naranja, mora o mango', price: 4000 },
-                { id: 5, name: 'Té Helado', description: 'Té frío con limón', price: 3000 },
-                { id: 6, name: 'Chocolate Caliente', description: 'Chocolate premium con crema', price: 4000 }
+                { id: 1, name: 'Americano Coffee', description: 'Premium black coffee', price: 2500 },
+                { id: 2, name: 'Latte', description: 'Espresso with steamed milk', price: 3500 },
+                { id: 3, name: 'Cappuccino', description: 'Espresso, milk and foam', price: 3500 },
+                { id: 4, name: 'Natural Juice', description: 'Orange, blackberry or mango', price: 4000 },
+                { id: 5, name: 'Iced Tea', description: 'Cold tea with lemon', price: 3000 },
+                { id: 6, name: 'Hot Chocolate', description: 'Premium chocolate with cream', price: 4000 }
             ],
             alimentos: [
-                { id: 7, name: 'Sándwich de Pollo', description: 'Pollo, lechuga, tomate, queso', price: 7500 },
-                { id: 8, name: 'Hamburguesa', description: 'Carne, queso, vegetales', price: 9000 },
-                { id: 9, name: 'Ensalada César', description: 'Lechuga, pollo, parmesano', price: 8500 },
-                { id: 10, name: 'Wrap Vegetariano', description: 'Vegetales asados y hummus', price: 7000 },
-                { id: 11, name: 'Pizza Personal', description: 'Queso y tomate', price: 10000 },
-                { id: 12, name: 'Pasta Carbonara', description: 'Pasta con salsa cremosa', price: 11000 }
+                { id: 7, name: 'Chicken Sandwich', description: 'Chicken, lettuce, tomato, cheese', price: 7500 },
+                { id: 8, name: 'Hamburger', description: 'Beef, cheese, vegetables', price: 9000 },
+                { id: 9, name: 'Caesar Salad', description: 'Lettuce, chicken, parmesan', price: 8500 },
+                { id: 10, name: 'Vegetarian Wrap', description: 'Roasted vegetables and hummus', price: 7000 },
+                { id: 11, name: 'Personal Pizza', description: 'Cheese and tomato', price: 10000 },
+                { id: 12, name: 'Pasta Carbonara', description: 'Pasta with cream sauce', price: 11000 }
             ],
             postres: [
-                { id: 13, name: 'Brownie', description: 'Chocolate con nueces', price: 3500 },
-                { id: 14, name: 'Cheesecake', description: 'Tarta de queso con frutos rojos', price: 4500 },
-                { id: 15, name: 'Galletas', description: 'Galletas de chocolate (3 unid)', price: 2500 },
-                { id: 16, name: 'Muffin', description: 'Muffin de arándanos', price: 3000 },
-                { id: 17, name: 'Tiramisú', description: 'Postre italiano tradicional', price: 5000 },
-                { id: 18, name: 'Helado', description: 'Dos bolas a elección', price: 4000 }
+                { id: 13, name: 'Brownie', description: 'Chocolate with walnuts', price: 3500 },
+                { id: 14, name: 'Cheesecake', description: 'Cheese tart with berries', price: 4500 },
+                { id: 15, name: 'Cookies', description: 'Chocolate cookies (3 units)', price: 2500 },
+                { id: 16, name: 'Muffin', description: 'Blueberry muffin', price: 3000 },
+                { id: 17, name: 'Tiramisu', description: 'Traditional Italian dessert', price: 5000 },
+                { id: 18, name: 'Ice Cream', description: 'Two scoops of your choice', price: 4000 }
             ]
         };
 
@@ -511,9 +511,9 @@
             productsSection.innerHTML = '';
 
             const categoryNames = {
-                bebidas: '☕ Bebidas',
-                alimentos: '🍔 Alimentos',
-                postres: '🍰 Postres'
+                bebidas: '☕ Beverages',
+                alimentos: '🍔 Food',
+                postres: '🍰 Desserts'
             };
 
             for (const [category, items] of Object.entries(products)) {
@@ -545,8 +545,8 @@
                     
                     const button = document.createElement('button');
                     button.className = 'add-to-cart-btn';
-                    button.textContent = 'Agregar al Carrito';
-                    button.setAttribute('aria-label', `Agregar ${product.name} al carrito`);
+                    button.textContent = 'Add to Cart';
+                    button.setAttribute('aria-label', `Add ${product.name} to cart`);
                     button.onclick = () => addToCart(product.id);
                     
                     productCard.appendChild(h3);
@@ -575,7 +575,7 @@
             }
 
             updateCart();
-            showNotification(`${product.name} agregado al carrito`);
+            showNotification(`${product.name} added to cart`);
         }
 
         // Find product by ID
@@ -619,9 +619,9 @@
                 emptyDiv.className = 'cart-empty';
                 
                 // Create text nodes without using innerHTML
-                const line1 = document.createTextNode('Tu carrito está vacío');
+                const line1 = document.createTextNode('Your cart is empty');
                 const br = document.createElement('br');
-                const line2 = document.createTextNode('¡Agrega productos para comenzar!');
+                const line2 = document.createTextNode('Add products to get started!');
                 
                 emptyDiv.appendChild(line1);
                 emptyDiv.appendChild(br);
@@ -657,24 +657,24 @@
                     const decreaseBtn = document.createElement('button');
                     decreaseBtn.className = 'quantity-btn';
                     decreaseBtn.textContent = '-';
-                    decreaseBtn.setAttribute('aria-label', `Disminuir cantidad de ${item.name}`);
+                    decreaseBtn.setAttribute('aria-label', `Decrease quantity of ${item.name}`);
                     decreaseBtn.onclick = () => updateQuantity(item.id, -1);
                     
                     const quantitySpan = document.createElement('span');
                     quantitySpan.className = 'quantity';
                     quantitySpan.textContent = item.quantity;
-                    quantitySpan.setAttribute('aria-label', `Cantidad: ${item.quantity}`);
+                    quantitySpan.setAttribute('aria-label', `Quantity: ${item.quantity}`);
                     
                     const increaseBtn = document.createElement('button');
                     increaseBtn.className = 'quantity-btn';
                     increaseBtn.textContent = '+';
-                    increaseBtn.setAttribute('aria-label', `Aumentar cantidad de ${item.name}`);
+                    increaseBtn.setAttribute('aria-label', `Increase quantity of ${item.name}`);
                     increaseBtn.onclick = () => updateQuantity(item.id, 1);
                     
                     const removeBtn = document.createElement('button');
                     removeBtn.className = 'remove-btn';
                     removeBtn.textContent = '✕';
-                    removeBtn.setAttribute('aria-label', `Eliminar ${item.name} del carrito`);
+                    removeBtn.setAttribute('aria-label', `Remove ${item.name} from cart`);
                     removeBtn.onclick = () => removeFromCart(item.id);
                     
                     controls.appendChild(decreaseBtn);
@@ -723,18 +723,18 @@
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const paymentNames = {
-                efectivo: 'Efectivo',
-                tarjeta: 'Tarjeta',
-                transferencia: 'Transferencia',
-                contra: 'Contra Virtual'
+                efectivo: 'Cash',
+                tarjeta: 'Card',
+                transferencia: 'Transfer',
+                contra: 'Virtual Account'
             };
 
             // Show custom confirmation message
             const confirmationMsg = 
-                `¡Pedido Confirmado! 🎉\n\n` +
+                `Order Confirmed! 🎉\n\n` +
                 `Total: $${total.toLocaleString()}\n` +
-                `Método de pago: ${paymentNames[selectedPayment]}\n\n` +
-                `Tu pedido se está procesando.\nRecibirás una confirmación pronto.`;
+                `Payment method: ${paymentNames[selectedPayment]}\n\n` +
+                `Your order is being processed.\nYou will receive a confirmation soon.`;
             
             showNotification(confirmationMsg, 4000);
 
