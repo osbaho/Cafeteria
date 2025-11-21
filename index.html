@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafetería Virtual - Pedidos Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .products-section {
+            display: grid;
+            gap: 20px;
+        }
+
+        .category {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .category h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+        }
+
+        .product-card h3 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .product-card p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: #667eea;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #764ba2;
+        }
+
+        .cart-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .cart-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .cart-items {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #667eea;
+            font-size: 0.9em;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .quantity {
+            font-weight: bold;
+            color: #333;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        .cart-empty {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+        }
+
+        .cart-total {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .cart-total-row.total {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .payment-section {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .payment-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .payment-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .payment-option.selected {
+            border-color: #667eea;
+            background: #e6eeff;
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .payment-option label {
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-section {
+                position: relative;
+                top: 0;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+
+    <div class="container">
+        <header>
+            <h1>🍽️ Cafetería Virtual</h1>
+            <p>Haz tu pedido online - Rápido y fácil</p>
+        </header>
+
+        <div class="main-content">
+            <div class="products-section" id="products-section">
+                <!-- Products will be loaded here by JavaScript -->
+            </div>
+
+            <div class="cart-section">
+                <h2>🛒 Tu Pedido</h2>
+                <div class="cart-items" id="cart-items">
+                    <div class="cart-empty">
+                        Tu carrito está vacío<br>
+                        ¡Agrega productos para comenzar!
+                    </div>
+                </div>
+
+                <div class="cart-total" id="cart-total" style="display: none;">
+                    <div class="cart-total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0</span>
+                    </div>
+                    <div class="cart-total-row total">
+                        <span>Total:</span>
+                        <span id="total">$0</span>
+                    </div>
+                </div>
+
+                <div class="payment-section" id="payment-section" style="display: none;">
+                    <h3>Método de Pago</h3>
+                    <div class="payment-options">
+                        <div class="payment-option" onclick="selectPayment('efectivo')">
+                            <input type="radio" name="payment" id="efectivo" value="efectivo">
+                            <label for="efectivo">💵 Efectivo</label>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('tarjeta')">
+                            <input type="radio" name="payment" id="tarjeta" value="tarjeta">
+                            <label for="tarjeta">💳 Tarjeta de Crédito/Débito</label>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('transferencia')">
+                            <input type="radio" name="payment" id="transferencia" value="transferencia">
+                            <label for="transferencia">🏦 Transferencia Bancaria</label>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('contra')">
+                            <input type="radio" name="payment" id="contra" value="contra">
+                            <label for="contra">🔄 Contra Virtual</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="checkout-btn" id="checkout-btn" onclick="checkout()" disabled>
+                    Finalizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product catalog
+        const products = {
+            bebidas: [
+                { id: 1, name: 'Café Americano', description: 'Café negro de grano premium', price: 2500 },
+                { id: 2, name: 'Café Latte', description: 'Espresso con leche vaporizada', price: 3500 },
+                { id: 3, name: 'Cappuccino', description: 'Espresso, leche y espuma', price: 3500 },
+                { id: 4, name: 'Jugo Natural', description: 'Naranja, mora o mango', price: 4000 },
+                { id: 5, name: 'Té Helado', description: 'Té frío con limón', price: 3000 },
+                { id: 6, name: 'Chocolate Caliente', description: 'Chocolate premium con crema', price: 4000 }
+            ],
+            alimentos: [
+                { id: 7, name: 'Sándwich de Pollo', description: 'Pollo, lechuga, tomate, queso', price: 7500 },
+                { id: 8, name: 'Hamburguesa', description: 'Carne, queso, vegetales', price: 9000 },
+                { id: 9, name: 'Ensalada César', description: 'Lechuga, pollo, parmesano', price: 8500 },
+                { id: 10, name: 'Wrap Vegetariano', description: 'Vegetales asados y hummus', price: 7000 },
+                { id: 11, name: 'Pizza Personal', description: 'Queso y tomate', price: 10000 },
+                { id: 12, name: 'Pasta Carbonara', description: 'Pasta con salsa cremosa', price: 11000 }
+            ],
+            postres: [
+                { id: 13, name: 'Brownie', description: 'Chocolate con nueces', price: 3500 },
+                { id: 14, name: 'Cheesecake', description: 'Tarta de queso con frutos rojos', price: 4500 },
+                { id: 15, name: 'Galletas', description: 'Galletas de chocolate (3 unid)', price: 2500 },
+                { id: 16, name: 'Muffin', description: 'Muffin de arándanos', price: 3000 },
+                { id: 17, name: 'Tiramisú', description: 'Postre italiano tradicional', price: 5000 },
+                { id: 18, name: 'Helado', description: 'Dos bolas a elección', price: 4000 }
+            ]
+        };
+
+        // Shopping cart
+        let cart = [];
+        let selectedPayment = null;
+
+        // Initialize the page
+        function init() {
+            renderProducts();
+            updateCart();
+        }
+
+        // Render all products
+        function renderProducts() {
+            const productsSection = document.getElementById('products-section');
+            productsSection.innerHTML = '';
+
+            const categoryNames = {
+                bebidas: '☕ Bebidas',
+                alimentos: '🍔 Alimentos',
+                postres: '🍰 Postres'
+            };
+
+            for (const [category, items] of Object.entries(products)) {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                const categoryTitle = document.createElement('h2');
+                categoryTitle.textContent = categoryNames[category];
+                categoryDiv.appendChild(categoryTitle);
+
+                const productsGrid = document.createElement('div');
+                productsGrid.className = 'products-grid';
+
+                items.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-price">$${product.price.toLocaleString()}</div>
+                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                            Agregar al Carrito
+                        </button>
+                    `;
+                    productsGrid.appendChild(productCard);
+                });
+
+                categoryDiv.appendChild(productsGrid);
+                productsSection.appendChild(categoryDiv);
+            }
+        }
+
+        // Add product to cart
+        function addToCart(productId) {
+            const product = findProductById(productId);
+            if (!product) return;
+
+            const cartItem = cart.find(item => item.id === productId);
+            if (cartItem) {
+                cartItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCart();
+            showNotification(`${product.name} agregado al carrito`);
+        }
+
+        // Find product by ID
+        function findProductById(id) {
+            for (const category of Object.values(products)) {
+                const product = category.find(p => p.id === id);
+                if (product) return product;
+            }
+            return null;
+        }
+
+        // Update quantity
+        function updateQuantity(productId, change) {
+            const cartItem = cart.find(item => item.id === productId);
+            if (!cartItem) return;
+
+            cartItem.quantity += change;
+            if (cartItem.quantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                updateCart();
+            }
+        }
+
+        // Remove from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // Update cart display
+        function updateCart() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            const cartTotalDiv = document.getElementById('cart-total');
+            const paymentSection = document.getElementById('payment-section');
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = `
+                    <div class="cart-empty">
+                        Tu carrito está vacío<br>
+                        ¡Agrega productos para comenzar!
+                    </div>
+                `;
+                cartTotalDiv.style.display = 'none';
+                paymentSection.style.display = 'none';
+                checkoutBtn.disabled = true;
+            } else {
+                cartItemsDiv.innerHTML = '';
+                cart.forEach(item => {
+                    const cartItemDiv = document.createElement('div');
+                    cartItemDiv.className = 'cart-item';
+                    cartItemDiv.innerHTML = `
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">$${item.price.toLocaleString()} c/u</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                            <span class="quantity">${item.quantity}</span>
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            <button class="remove-btn" onclick="removeFromCart(${item.id})">✕</button>
+                        </div>
+                    `;
+                    cartItemsDiv.appendChild(cartItemDiv);
+                });
+
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
+                document.getElementById('total').textContent = `$${subtotal.toLocaleString()}`;
+
+                cartTotalDiv.style.display = 'block';
+                paymentSection.style.display = 'block';
+                checkoutBtn.disabled = !selectedPayment;
+            }
+        }
+
+        // Select payment method
+        function selectPayment(method) {
+            selectedPayment = method;
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.closest('.payment-option').classList.add('selected');
+            document.getElementById(method).checked = true;
+            document.getElementById('checkout-btn').disabled = false;
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0 || !selectedPayment) return;
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const paymentNames = {
+                efectivo: 'Efectivo',
+                tarjeta: 'Tarjeta',
+                transferencia: 'Transferencia',
+                contra: 'Contra Virtual'
+            };
+
+            alert(
+                `¡Pedido Confirmado! 🎉\n\n` +
+                `Total: $${total.toLocaleString()}\n` +
+                `Método de pago: ${paymentNames[selectedPayment]}\n\n` +
+                `Tu pedido se está procesando.\n` +
+                `Recibirás una confirmación pronto.`
+            );
+
+            // Reset cart
+            cart = [];
+            selectedPayment = null;
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll('input[name="payment"]').forEach(input => {
+                input.checked = false;
+            });
+            updateCart();
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        // Initialize on page load
+        window.onload = init;
+    </script>
+</body>
+</html>
