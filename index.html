@@ -399,19 +399,19 @@
                     <h3>Método de Pago</h3>
                     <div class="payment-options">
                         <div class="payment-option" onclick="selectPayment('efectivo', event)" onkeydown="handlePaymentKeydown('efectivo', event)" tabindex="0" role="button" aria-label="Seleccionar pago en efectivo">
-                            <input type="radio" name="payment" id="efectivo" value="efectivo">
+                            <input type="radio" name="payment" id="efectivo" value="efectivo" tabindex="-1">
                             <label for="efectivo">💵 Efectivo</label>
                         </div>
                         <div class="payment-option" onclick="selectPayment('tarjeta', event)" onkeydown="handlePaymentKeydown('tarjeta', event)" tabindex="0" role="button" aria-label="Seleccionar pago con tarjeta">
-                            <input type="radio" name="payment" id="tarjeta" value="tarjeta">
+                            <input type="radio" name="payment" id="tarjeta" value="tarjeta" tabindex="-1">
                             <label for="tarjeta">💳 Tarjeta de Crédito/Débito</label>
                         </div>
                         <div class="payment-option" onclick="selectPayment('transferencia', event)" onkeydown="handlePaymentKeydown('transferencia', event)" tabindex="0" role="button" aria-label="Seleccionar pago con transferencia bancaria">
-                            <input type="radio" name="payment" id="transferencia" value="transferencia">
+                            <input type="radio" name="payment" id="transferencia" value="transferencia" tabindex="-1">
                             <label for="transferencia">🏦 Transferencia Bancaria</label>
                         </div>
                         <div class="payment-option" onclick="selectPayment('contra', event)" onkeydown="handlePaymentKeydown('contra', event)" tabindex="0" role="button" aria-label="Seleccionar pago con contra virtual">
-                            <input type="radio" name="payment" id="contra" value="contra">
+                            <input type="radio" name="payment" id="contra" value="contra" tabindex="-1">
                             <label for="contra">🔄 Contra Virtual</label>
                         </div>
                     </div>
@@ -495,14 +495,27 @@
                 items.forEach(product => {
                     const productCard = document.createElement('div');
                     productCard.className = 'product-card';
-                    productCard.innerHTML = `
-                        <h3>${escapeHtml(product.name)}</h3>
-                        <p>${escapeHtml(product.description)}</p>
-                        <div class="product-price">$${product.price.toLocaleString()}</div>
-                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
-                            Agregar al Carrito
-                        </button>
-                    `;
+                    
+                    const h3 = document.createElement('h3');
+                    h3.textContent = product.name;
+                    
+                    const p = document.createElement('p');
+                    p.textContent = product.description;
+                    
+                    const priceDiv = document.createElement('div');
+                    priceDiv.className = 'product-price';
+                    priceDiv.textContent = `$${product.price.toLocaleString()}`;
+                    
+                    const button = document.createElement('button');
+                    button.className = 'add-to-cart-btn';
+                    button.textContent = 'Agregar al Carrito';
+                    button.onclick = () => addToCart(product.id);
+                    
+                    productCard.appendChild(h3);
+                    productCard.appendChild(p);
+                    productCard.appendChild(priceDiv);
+                    productCard.appendChild(button);
+                    
                     productsGrid.appendChild(productCard);
                 });
 
@@ -577,18 +590,51 @@
                 cart.forEach(item => {
                     const cartItemDiv = document.createElement('div');
                     cartItemDiv.className = 'cart-item';
-                    cartItemDiv.innerHTML = `
-                        <div class="cart-item-info">
-                            <div class="cart-item-name">${escapeHtml(item.name)}</div>
-                            <div class="cart-item-price">$${item.price.toLocaleString()} c/u</div>
-                        </div>
-                        <div class="cart-item-controls">
-                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
-                            <span class="quantity">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-                            <button class="remove-btn" onclick="removeFromCart(${item.id})">✕</button>
-                        </div>
-                    `;
+                    
+                    const itemInfo = document.createElement('div');
+                    itemInfo.className = 'cart-item-info';
+                    
+                    const itemName = document.createElement('div');
+                    itemName.className = 'cart-item-name';
+                    itemName.textContent = item.name;
+                    
+                    const itemPrice = document.createElement('div');
+                    itemPrice.className = 'cart-item-price';
+                    itemPrice.textContent = `$${item.price.toLocaleString()} c/u`;
+                    
+                    itemInfo.appendChild(itemName);
+                    itemInfo.appendChild(itemPrice);
+                    
+                    const controls = document.createElement('div');
+                    controls.className = 'cart-item-controls';
+                    
+                    const decreaseBtn = document.createElement('button');
+                    decreaseBtn.className = 'quantity-btn';
+                    decreaseBtn.textContent = '-';
+                    decreaseBtn.onclick = () => updateQuantity(item.id, -1);
+                    
+                    const quantitySpan = document.createElement('span');
+                    quantitySpan.className = 'quantity';
+                    quantitySpan.textContent = item.quantity;
+                    
+                    const increaseBtn = document.createElement('button');
+                    increaseBtn.className = 'quantity-btn';
+                    increaseBtn.textContent = '+';
+                    increaseBtn.onclick = () => updateQuantity(item.id, 1);
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.textContent = '✕';
+                    removeBtn.onclick = () => removeFromCart(item.id);
+                    
+                    controls.appendChild(decreaseBtn);
+                    controls.appendChild(quantitySpan);
+                    controls.appendChild(increaseBtn);
+                    controls.appendChild(removeBtn);
+                    
+                    cartItemDiv.appendChild(itemInfo);
+                    cartItemDiv.appendChild(controls);
+                    
                     cartItemsDiv.appendChild(cartItemDiv);
                 });
 
