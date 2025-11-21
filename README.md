@@ -31,7 +31,7 @@ Virtual Cafeteria is a web-based platform that allows users to browse a catalog 
 - **SEO Optimized**: Includes meta tags, Open Graph, Twitter Cards, and JSON-LD structured data.
 - **Performance**: Implements lazy loading for images and resource preconnecting.
 - **Accessibility**: Semantic HTML, ARIA labels, and keyboard navigation support.
-- **Security**: Robust XSS protection via Content Security Policy (CSP) and secure DOM manipulation.
+- **Security**: Robust XSS protection via secure DOM manipulation (using `textContent` and `createElement` instead of `innerHTML`).
 
 ## Installation & Usage
 
@@ -57,8 +57,7 @@ Cafeteria/
 ├── index.html              # Main application entry point
 ├── styles.css              # Global styles and responsive design
 ├── script.js               # Application logic (Cart, Search, Modal)
-├── images/                 # Asset directory
-├── test-xss-security.html  # Security test suite
+├── images/                 # Asset directory (currently using placeholders)
 ├── SECURITY.md             # Security documentation
 └── README.md               # Project documentation
 ```
@@ -71,13 +70,12 @@ Cafeteria/
 
 ## Security
 
-This project takes security seriously:
+This project prioritizes security:
 
-- **CSP**: Strict Content Security Policy implemented.
-- **Input Sanitization**: All user inputs are handled safely.
-- **DOM Safety**: Uses `textContent` and `createElement` to prevent XSS.
+- **Input Sanitization**: User inputs are handled safely.
+- **DOM Safety**: Uses `textContent` and `createElement` to prevent XSS attacks.
 
-See [SECURITY.md](SECURITY.md) for more details.
+See [SECURITY.md](SECURITY.md) for more details on security practices.
 
 ## License
 

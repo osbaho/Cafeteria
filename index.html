@@ -64,19 +64,17 @@
             <p>Place your order online - Fast and easy</p>
         </header>
 
-        <div class="main-content">
-            <div class="search-filter-section">
-                <div class="search-bar">
-                    <input type="text" id="search-input" placeholder="Search for coffee, food, desserts...">
-                    <span class="search-icon">🔍</span>
-                </div>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-category="all">All</button>
-                    <button class="filter-btn" data-category="bebidas">Beverages</button>
-                    <button class="filter-btn" data-category="alimentos">Food</button>
-                    <button class="filter-btn" data-category="postres">Desserts</button>
-                </div>
+        <!-- Category Filters (Browse-First) - Full Width -->
+        <section class="category-filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">All Products</button>
+                <button class="filter-btn" data-category="bebidas">Beverages</button>
+                <button class="filter-btn" data-category="alimentos">Food</button>
+                <button class="filter-btn" data-category="postres">Desserts</button>
             </div>
+        </section>
+
+        <div class="main-content">
             <main class="products-section" id="products-section" role="main">
                 <!-- Products will be loaded here by JavaScript -->
             </main>

@@ -138,6 +138,23 @@ let searchTerm = '';
 let selectedPayment = null;
 let virtualAccountBalance = 50.00; // Virtual account balance in USD
 
+// Setup event listeners
+function setupEventListeners() {
+    // Filter Buttons
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active state
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update category
+            currentCategory = btn.dataset.category;
+            renderProducts();
+        });
+    });
+}
+
 // Initialize the page
 function init() {
     setupEventListeners();
@@ -145,23 +162,6 @@ function init() {
     updateCart();
     updateVirtualBalance();
 }
-
-function setupEventListeners() {
-    document.getElementById('search-input').addEventListener('input', (e) => {
-        searchTerm = e.target.value;
-        renderProducts();
-    });
-
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            currentCategory = e.target.dataset.category;
-            renderProducts();
-        });
-    });
-}
-
 // Render all products
 function renderProducts() {
     const productsSection = document.getElementById('products-section');
@@ -178,11 +178,8 @@ function renderProducts() {
     for (const [category, items] of Object.entries(products)) {
         if (currentCategory !== 'all' && currentCategory !== category) continue;
 
-        const filteredItems = items.filter(product => {
-            const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                                  product.description.toLowerCase().includes(searchTerm.toLowerCase());
-            return matchesSearch;
-        });
+        // No search term filtering needed anymore
+        const filteredItems = items;
 
         if (filteredItems.length === 0) continue;
         hasResults = true;
