@@ -214,15 +214,15 @@
             // Test 1: Initial cart should be empty
             if (win.cart && win.cart.length === 0) {
                 addTestResult('cart-tests', 
-                    'Carrito Inicial Vacío', 
+                    'Initial Empty Cart', 
                     true, 
-                    '✅ El carrito inicia vacío correctamente'
+                    '✅ Cart starts empty correctly'
                 );
             } else {
                 addTestResult('cart-tests', 
-                    'Carrito Inicial Vacío', 
+                    'Initial Empty Cart', 
                     false, 
-                    '❌ El carrito no inicia vacío'
+                    '❌ Cart does not start empty'
                 );
             }
 
@@ -231,15 +231,15 @@
             win.addToCart(1); // Add Café Americano
             if (win.cart.length === initialLength + 1) {
                 addTestResult('cart-tests', 
-                    'Agregar Producto al Carrito', 
+                    'Add Product to Cart', 
                     true, 
-                    '✅ Producto agregado correctamente al carrito'
+                    '✅ Product added correctly to cart'
                 );
             } else {
                 addTestResult('cart-tests', 
-                    'Agregar Producto al Carrito', 
+                    'Add Product to Cart', 
                     false, 
-                    '❌ No se pudo agregar producto al carrito'
+                    '❌ Could not add product to cart'
                 );
             }
 
@@ -247,15 +247,15 @@
             win.addToCart(1); // Add same product again
             if (win.cart[0] && win.cart[0].quantity === 2) {
                 addTestResult('cart-tests', 
-                    'Incrementar Cantidad de Producto', 
+                    'Increase Product Quantity', 
                     true, 
-                    '✅ La cantidad se incrementa al agregar el mismo producto'
+                    '✅ Quantity increases when adding the same product'
                 );
             } else {
                 addTestResult('cart-tests', 
-                    'Incrementar Cantidad de Producto', 
+                    'Increase Product Quantity', 
                     false, 
-                    '❌ La cantidad no se incrementa correctamente'
+                    '❌ Quantity does not increase correctly'
                 );
             }
 
@@ -263,15 +263,15 @@
             win.updateQuantity(1, 1); // Increase by 1
             if (win.cart[0] && win.cart[0].quantity === 3) {
                 addTestResult('cart-tests', 
-                    'Actualizar Cantidad Manualmente', 
+                    'Update Quantity Manually', 
                     true, 
-                    '✅ La cantidad se actualiza correctamente con los botones +/-'
+                    '✅ Quantity updates correctly with +/- buttons'
                 );
             } else {
                 addTestResult('cart-tests', 
-                    'Actualizar Cantidad Manualmente', 
+                    'Update Quantity Manually', 
                     false, 
-                    '❌ La cantidad no se actualiza correctamente'
+                    '❌ Quantity does not update correctly'
                 );
             }
 
@@ -279,15 +279,15 @@
             win.updateQuantity(1, -2); // Decrease by 2
             if (win.cart[0] && win.cart[0].quantity === 1) {
                 addTestResult('cart-tests', 
-                    'Disminuir Cantidad', 
+                    'Decrease Quantity', 
                     true, 
-                    '✅ La cantidad disminuye correctamente'
+                    '✅ Quantity decreases correctly'
                 );
             } else {
                 addTestResult('cart-tests', 
-                    'Disminuir Cantidad', 
+                    'Decrease Quantity', 
                     false, 
-                    '❌ La cantidad no disminuye correctamente'
+                    '❌ Quantity does not decrease correctly'
                 );
             }
 
@@ -295,15 +295,15 @@
             win.updateQuantity(1, -1); // Should remove product
             if (win.cart.length === 0) {
                 addTestResult('cart-tests', 
-                    'Eliminar Producto al Llegar a Cantidad 0', 
+                    'Remove Product When Quantity Reaches 0', 
                     true, 
-                    '✅ El producto se elimina cuando la cantidad llega a 0'
+                    '✅ Product is removed when quantity reaches 0'
                 );
             } else {
                 addTestResult('cart-tests', 
-                    'Eliminar Producto al Llegar a Cantidad 0', 
+                    'Remove Product When Quantity Reaches 0', 
                     false, 
-                    '❌ El producto no se elimina correctamente'
+                    '❌ Product is not removed correctly'
                 );
             }
 
@@ -312,15 +312,15 @@
             win.removeFromCart(1);
             if (win.cart.length === 0) {
                 addTestResult('cart-tests', 
-                    'Eliminar Producto Directamente', 
+                    'Remove Product Directly', 
                     true, 
-                    '✅ El producto se elimina correctamente con el botón ✕'
+                    '✅ Product is removed correctly with ✕ button'
                 );
             } else {
                 addTestResult('cart-tests', 
-                    'Eliminar Producto Directamente', 
+                    'Remove Product Directly', 
                     false, 
-                    '❌ El producto no se elimina correctamente'
+                    '❌ Product is not removed correctly'
                 );
             }
 
@@ -330,15 +330,15 @@
             win.addToCart(13); // Brownie
             if (win.cart.length === 3) {
                 addTestResult('cart-tests', 
-                    'Múltiples Productos Diferentes', 
+                    'Multiple Different Products', 
                     true, 
-                    '✅ Se pueden agregar múltiples productos diferentes'
+                    '✅ Can add multiple different products'
                 );
             } else {
                 addTestResult('cart-tests', 
-                    'Múltiples Productos Diferentes', 
+                    'Multiple Different Products', 
                     false, 
-                    '❌ No se manejan correctamente múltiples productos'
+                    '❌ Multiple products not handled correctly'
                 );
             }
         }
@@ -355,15 +355,15 @@
             const total1 = win.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             if (total1 === 2500) {
                 addTestResult('calculation-tests', 
-                    'Cálculo de Total - Producto Único', 
+                    'Total Calculation - Single Product', 
                     true, 
-                    '✅ El total se calcula correctamente para un producto'
+                    '✅ Total calculated correctly for one product'
                 );
             } else {
                 addTestResult('calculation-tests', 
-                    'Cálculo de Total - Producto Único', 
+                    'Total Calculation - Single Product', 
                     false, 
-                    `❌ Total incorrecto: esperado 2500, obtenido ${total1}`
+                    `❌ Total incorrecto: esperado 2500, obtained ${total1}`
                 );
             }
 
@@ -373,15 +373,15 @@
             const total2 = win.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             if (total2 === 7500) {
                 addTestResult('calculation-tests', 
-                    'Cálculo de Total - Múltiples Cantidades', 
+                    'Total Calculation - Multiple Quantities', 
                     true, 
-                    '✅ El total se calcula correctamente con múltiples cantidades'
+                    '✅ Total calculated correctly with multiple quantities'
                 );
             } else {
                 addTestResult('calculation-tests', 
-                    'Cálculo de Total - Múltiples Cantidades', 
+                    'Total Calculation - Multiple Quantities', 
                     false, 
-                    `❌ Total incorrecto: esperado 7500, obtenido ${total2}`
+                    `❌ Total incorrecto: esperado 7500, obtained ${total2}`
                 );
             }
 
@@ -393,15 +393,15 @@
             const total3 = win.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             if (total3 === 16000) {
                 addTestResult('calculation-tests', 
-                    'Cálculo de Total - Múltiples Productos', 
+                    'Total Calculation - Multiple Products', 
                     true, 
-                    '✅ El total se calcula correctamente con múltiples productos'
+                    '✅ Total calculated correctly with multiple products'
                 );
             } else {
                 addTestResult('calculation-tests', 
-                    'Cálculo de Total - Múltiples Productos', 
+                    'Total Calculation - Multiple Products', 
                     false, 
-                    `❌ Total incorrecto: esperado 16000, obtenido ${total3}`
+                    `❌ Total incorrecto: esperado 16000, obtained ${total3}`
                 );
             }
 
@@ -412,15 +412,15 @@
             
             if (product1.price === 2500 && product8.price === 9000 && product14.price === 4500) {
                 addTestResult('calculation-tests', 
-                    'Precios de Productos Correctos', 
+                    'Product Prices Correct', 
                     true, 
-                    '✅ Los precios de los productos son correctos'
+                    '✅ Product prices are correct'
                 );
             } else {
                 addTestResult('calculation-tests', 
-                    'Precios de Productos Correctos', 
+                    'Product Prices Correct', 
                     false, 
-                    '❌ Algunos precios de productos son incorrectos'
+                    '❌ Some product prices are incorrect'
                 );
             }
         }
@@ -435,15 +435,15 @@
             // Test 1: Initial payment selection should be null
             if (win.selectedPayment === null) {
                 addTestResult('payment-tests', 
-                    'Selección de Pago Inicial', 
+                    'Initial Payment Selection', 
                     true, 
-                    '✅ No hay método de pago seleccionado inicialmente'
+                    '✅ No payment method selected initially'
                 );
             } else {
                 addTestResult('payment-tests', 
-                    'Selección de Pago Inicial', 
+                    'Initial Payment Selection', 
                     false, 
-                    '❌ Hay un método de pago seleccionado por defecto'
+                    '❌ There is a default payment method selected'
                 );
             }
 
@@ -452,15 +452,15 @@
             win.selectPayment('efectivo', mockEvent);
             if (win.selectedPayment === 'efectivo') {
                 addTestResult('payment-tests', 
-                    'Seleccionar Método de Pago', 
+                    'Select Payment Method', 
                     true, 
-                    '✅ Se puede seleccionar un método de pago'
+                    '✅ Can select a payment method'
                 );
             } else {
                 addTestResult('payment-tests', 
-                    'Seleccionar Método de Pago', 
+                    'Select Payment Method', 
                     false, 
-                    '❌ No se pudo seleccionar método de pago'
+                    '❌ Could not select payment method'
                 );
             }
 
@@ -469,15 +469,15 @@
             win.selectPayment('tarjeta', mockEvent2);
             if (win.selectedPayment === 'tarjeta') {
                 addTestResult('payment-tests', 
-                    'Cambiar Método de Pago', 
+                    'Change Payment Method', 
                     true, 
-                    '✅ Se puede cambiar el método de pago'
+                    '✅ Can change payment method'
                 );
             } else {
                 addTestResult('payment-tests', 
-                    'Cambiar Método de Pago', 
+                    'Change Payment Method', 
                     false, 
-                    '❌ No se pudo cambiar el método de pago'
+                    '❌ Could not change payment method'
                 );
             }
 
@@ -489,15 +489,15 @@
             
             if (allAvailable) {
                 addTestResult('payment-tests', 
-                    'Métodos de Pago Disponibles', 
+                    'Available Payment Methods', 
                     true, 
-                    '✅ Todos los métodos de pago están disponibles (efectivo, tarjeta, transferencia, contra)'
+                    '✅ All payment methods are available (cash, card, transfer, virtual account)'
                 );
             } else {
                 addTestResult('payment-tests', 
-                    'Métodos de Pago Disponibles', 
+                    'Available Payment Methods', 
                     false, 
-                    '❌ Faltan algunos métodos de pago'
+                    '❌ Some payment methods are missing'
                 );
             }
         }
@@ -513,15 +513,15 @@
             const checkoutBtn = win.document.getElementById('checkout-btn');
             if (checkoutBtn.disabled) {
                 addTestResult('checkout-tests', 
-                    'Botón Deshabilitado con Carrito Vacío', 
+                    'Button Disabled with Empty Cart', 
                     true, 
-                    '✅ El botón de checkout está deshabilitado cuando el carrito está vacío'
+                    '✅ Checkout button is disabled when cart is empty'
                 );
             } else {
                 addTestResult('checkout-tests', 
-                    'Botón Deshabilitado con Carrito Vacío', 
+                    'Button Disabled with Empty Cart', 
                     false, 
-                    '❌ El botón de checkout no está deshabilitado con carrito vacío'
+                    '❌ Checkout button is not disabled with empty cart'
                 );
             }
 
@@ -530,15 +530,15 @@
             win.updateCart();
             if (checkoutBtn.disabled) {
                 addTestResult('checkout-tests', 
-                    'Botón Deshabilitado sin Método de Pago', 
+                    'Button Disabled without Payment Method', 
                     true, 
-                    '✅ El botón de checkout está deshabilitado sin método de pago'
+                    '✅ Checkout button is disabled without payment method'
                 );
             } else {
                 addTestResult('checkout-tests', 
-                    'Botón Deshabilitado sin Método de Pago', 
+                    'Button Disabled without Payment Method', 
                     false, 
-                    '❌ El botón de checkout no se deshabilita sin método de pago'
+                    '❌ Checkout button is not disabled without payment method'
                 );
             }
 
@@ -547,15 +547,15 @@
             win.selectPayment('efectivo', mockEvent);
             if (!checkoutBtn.disabled) {
                 addTestResult('checkout-tests', 
-                    'Botón Habilitado con Items y Pago', 
+                    'Button Enabled with Items and Payment', 
                     true, 
-                    '✅ El botón de checkout se habilita con items y método de pago'
+                    '✅ Checkout button enables with items and payment method'
                 );
             } else {
                 addTestResult('checkout-tests', 
-                    'Botón Habilitado con Items y Pago', 
+                    'Button Enabled with Items and Payment', 
                     false, 
-                    '❌ El botón de checkout no se habilita correctamente'
+                    '❌ Checkout button does not enable correctly'
                 );
             }
 
@@ -564,30 +564,30 @@
             win.checkout();
             if (win.cart.length === 0 && cartLength > 0) {
                 addTestResult('checkout-tests', 
-                    'Checkout Limpia el Carrito', 
+                    'Checkout Clears Cart', 
                     true, 
-                    '✅ El checkout limpia el carrito correctamente'
+                    '✅ Checkout clears cart correctly'
                 );
             } else {
                 addTestResult('checkout-tests', 
-                    'Checkout Limpia el Carrito', 
+                    'Checkout Clears Cart', 
                     false, 
-                    '❌ El checkout no limpia el carrito'
+                    '❌ Checkout does not clear cart'
                 );
             }
 
             // Test 5: Checkout resets payment selection
             if (win.selectedPayment === null) {
                 addTestResult('checkout-tests', 
-                    'Checkout Resetea Selección de Pago', 
+                    'Checkout Resets Payment Selection', 
                     true, 
-                    '✅ El checkout resetea la selección de pago'
+                    '✅ Checkout resets payment selection'
                 );
             } else {
                 addTestResult('checkout-tests', 
-                    'Checkout Resetea Selección de Pago', 
+                    'Checkout Resets Payment Selection', 
                     false, 
-                    '❌ El checkout no resetea la selección de pago'
+                    '❌ Checkout does not reset payment selection'
                 );
             }
 
@@ -601,15 +601,15 @@
             
             if (win.cart.length === 0 && win.selectedPayment === null && totalBeforeCheckout > 0) {
                 addTestResult('checkout-tests', 
-                    'Flujo Completo de Pedido', 
+                    'Complete Order Flow', 
                     true, 
-                    '✅ El flujo completo de pedido funciona correctamente'
+                    '✅ Complete order flow works correctly'
                 );
             } else {
                 addTestResult('checkout-tests', 
-                    'Flujo Completo de Pedido', 
+                    'Complete Order Flow', 
                     false, 
-                    '❌ El flujo completo de pedido tiene errores'
+                    '❌ Complete order flow has errors'
                 );
             }
         }
