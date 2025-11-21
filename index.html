@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Cafetería Virtual - Pedidos Online</title>
     <style>
+        /* ============================================
+           RESET Y ESTILOS GLOBALES
+           ============================================ */
         * {
             margin: 0;
             padding: 0;
@@ -18,6 +26,9 @@
             padding: 20px;
         }
 
+        /* ============================================
+           CONTENEDOR PRINCIPAL
+           ============================================ */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -27,6 +38,9 @@
             overflow: hidden;
         }
 
+        /* ============================================
+           HEADER / ENCABEZADO
+           ============================================ */
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -44,6 +58,9 @@
             opacity: 0.9;
         }
 
+        /* ============================================
+           DISEÑO PRINCIPAL - GRID
+           ============================================ */
         .main-content {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -51,6 +68,9 @@
             padding: 30px;
         }
 
+        /* ============================================
+           SECCIÓN DE PRODUCTOS
+           ============================================ */
         .products-section {
             display: grid;
             gap: 20px;
@@ -77,6 +97,7 @@
             margin-top: 15px;
         }
 
+        /* Tarjetas de Productos */
         .product-card {
             background: white;
             border-radius: 10px;
@@ -110,6 +131,7 @@
             margin-bottom: 10px;
         }
 
+        /* Botón Agregar al Carrito */
         .add-to-cart-btn {
             width: 100%;
             padding: 10px;
@@ -126,6 +148,9 @@
             background: #764ba2;
         }
 
+        /* ============================================
+           SECCIÓN DEL CARRITO
+           ============================================ */
         .cart-section {
             background: #f8f9fa;
             border-radius: 15px;
@@ -143,6 +168,7 @@
             padding-bottom: 10px;
         }
 
+        /* Items del Carrito */
         .cart-items {
             max-height: 400px;
             overflow-y: auto;
@@ -220,12 +246,16 @@
             background: #c82333;
         }
 
+        /* Estado Vacío del Carrito */
         .cart-empty {
             text-align: center;
             color: #999;
             padding: 40px 20px;
         }
 
+        /* ============================================
+           TOTALES Y RESUMEN
+           ============================================ */
         .cart-total {
             background: white;
             border-radius: 8px;
@@ -249,6 +279,9 @@
             padding-top: 10px;
         }
 
+        /* ============================================
+           MÉTODOS DE PAGO
+           ============================================ */
         .payment-section {
             background: white;
             border-radius: 8px;
@@ -298,6 +331,9 @@
             align-items: center;
         }
 
+        /* ============================================
+           BOTÓN DE FINALIZAR PEDIDO
+           ============================================ */
         .checkout-btn {
             width: 100%;
             padding: 15px;
@@ -322,6 +358,9 @@
             transform: none;
         }
 
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -337,6 +376,9 @@
             }
         }
 
+        /* ============================================
+           NOTIFICACIONES
+           ============================================ */
         .notification {
             position: fixed;
             top: 20px;
@@ -575,7 +617,16 @@
                 cartItemsDiv.innerHTML = '';
                 const emptyDiv = document.createElement('div');
                 emptyDiv.className = 'cart-empty';
-                emptyDiv.innerHTML = 'Tu carrito está vacío<br>¡Agrega productos para comenzar!';
+                
+                // Create text nodes without using innerHTML
+                const line1 = document.createTextNode('Tu carrito está vacío');
+                const br = document.createElement('br');
+                const line2 = document.createTextNode('¡Agrega productos para comenzar!');
+                
+                emptyDiv.appendChild(line1);
+                emptyDiv.appendChild(br);
+                emptyDiv.appendChild(line2);
+                
                 cartItemsDiv.appendChild(emptyDiv);
                 cartTotalDiv.style.display = 'none';
                 paymentSection.style.display = 'none';
