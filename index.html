@@ -362,7 +362,7 @@
     </style>
 </head>
 <body>
-    <div class="notification" id="notification"></div>
+    <div class="notification" id="notification" role="status" aria-live="polite"></div>
 
     <div class="container">
         <header>
@@ -371,11 +371,11 @@
         </header>
 
         <div class="main-content">
-            <div class="products-section" id="products-section">
+            <main class="products-section" id="products-section" role="main">
                 <!-- Products will be loaded here by JavaScript -->
-            </div>
+            </main>
 
-            <div class="cart-section">
+            <aside class="cart-section" role="complementary" aria-label="Carrito de compras">
                 <h2>🛒 Tu Pedido</h2>
                 <div class="cart-items" id="cart-items">
                     <div class="cart-empty">
@@ -420,7 +420,7 @@
                 <button class="checkout-btn" id="checkout-btn" onclick="checkout()" disabled>
                     Finalizar Pedido
                 </button>
-            </div>
+                </aside>
         </div>
     </div>
 
@@ -486,8 +486,9 @@
                 productsGrid.className = 'products-grid';
 
                 items.forEach(product => {
-                    const productCard = document.createElement('div');
+                    const productCard = document.createElement('article');
                     productCard.className = 'product-card';
+                    productCard.setAttribute('aria-label', `${product.name} - ${product.description} - $${product.price.toLocaleString()}`);
                     
                     const h3 = document.createElement('h3');
                     h3.textContent = product.name;
@@ -498,10 +499,12 @@
                     const priceDiv = document.createElement('div');
                     priceDiv.className = 'product-price';
                     priceDiv.textContent = `$${product.price.toLocaleString()}`;
+                    priceDiv.setAttribute('aria-label', `Precio: ${product.price.toLocaleString()} pesos`);
                     
                     const button = document.createElement('button');
                     button.className = 'add-to-cart-btn';
                     button.textContent = 'Agregar al Carrito';
+                    button.setAttribute('aria-label', `Agregar ${product.name} al carrito`);
                     button.onclick = () => addToCart(product.id);
                     
                     productCard.appendChild(h3);
@@ -699,7 +702,19 @@
         // Show notification
         function showNotification(message, duration = 2000) {
             const notification = document.getElementById('notification');
-            notification.textContent = message;
+            // Clear previous content
+            notification.innerHTML = '';
+            
+            // Split multi-line messages and create proper elements
+            const lines = message.split('\n');
+            lines.forEach((line, index) => {
+                if (line.trim()) {
+                    const lineElement = document.createElement('div');
+                    lineElement.textContent = line;
+                    notification.appendChild(lineElement);
+                }
+            });
+            
             notification.classList.add('show');
             setTimeout(() => {
                 notification.classList.remove('show');
