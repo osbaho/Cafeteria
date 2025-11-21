@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Virtual Cafeteria - Online Orders</title>
+    <style>
+        /* ============================================
+           RESET AND GLOBAL STYLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ============================================
+           MAIN CONTAINER
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* ============================================
+           MAIN LAYOUT - GRID
+           ============================================ */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        /* ============================================
+           PRODUCTS SECTION
+           ============================================ */
+        .products-section {
+            display: grid;
+            gap: 20px;
+        }
+
+        .category {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .category h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        /* Product Cards */
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+        }
+
+        .product-card h3 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .product-card p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: #667eea;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Add to Cart Button */
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #764ba2;
+        }
+
+        /* ============================================
+           CART SECTION
+           ============================================ */
+        .cart-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .cart-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        /* Cart Items */
+        .cart-items {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #667eea;
+            font-size: 0.9em;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .quantity {
+            font-weight: bold;
+            color: #333;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        /* Empty Cart State */
+        .cart-empty {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+        }
+
+        /* ============================================
+           TOTALS AND SUMMARY
+           ============================================ */
+        .cart-total {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .cart-total-row.total {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+        }
+
+        /* ============================================
+           PAYMENT METHODS
+           ============================================ */
+        .payment-section {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .payment-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .payment-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .payment-option.selected {
+            border-color: #667eea;
+            background: #e6eeff;
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .payment-option label {
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ============================================
+           PAYMENT FORMS
+           ============================================ */
+        .payment-form {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 2px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .payment-form.active {
+            display: block;
+        }
+
+        .payment-form h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+        }
+
+        .bank-info {
+            background: #f0f4ff;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .bank-info p {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .bank-info strong {
+            color: #667eea;
+        }
+
+        .balance-display {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .balance-display .balance-amount {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .balance-display .balance-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* ============================================
+           CHECKOUT BUTTON
+           ============================================ */
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-section {
+                position: relative;
+                top: 0;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        /* ============================================
+           NOTIFICATIONS
+           ============================================ */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            z-index: 1000;
+            max-width: 400px;
+            white-space: pre-line;
+            text-align: left;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================
+           CUSTOMIZATION MODAL
+           ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            margin-bottom: 5px;
+            font-size: 1.8em;
+        }
+
+        .modal-header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 8px;
+        }
+
+        .ingredient-item,
+        .addition-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.3s;
+        }
+
+        .ingredient-item:hover,
+        .addition-item:hover {
+            background: #e9ecef;
+        }
+
+        .ingredient-item.required {
+            background: #e6eeff;
+            border: 2px solid #667eea;
+        }
+
+        .ingredient-left,
+        .addition-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .ingredient-checkbox,
+        .addition-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .ingredient-checkbox:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .ingredient-name,
+        .addition-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .ingredient-badge {
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .ingredient-price,
+        .addition-price {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .ingredient-price.discount {
+            color: #28a745;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            background: #f8f9fa;
+            border-radius: 0 0 20px 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .price-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .price-summary .label {
+            color: #666;
+        }
+
+        .price-summary.total {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-cancel,
+        .btn-add-to-cart {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel {
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background: #dee2e6;
+        }
+
+        .btn-add-to-cart {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification" role="status" aria-live="polite"></div>
+
+    <div class="container">
+        <header>
+            <h1>🍽️ Virtual Cafeteria</h1>
+            <p>Place your order online - Fast and easy</p>
+        </header>
+
+        <div class="main-content">
+            <main class="products-section" id="products-section" role="main">
+                <!-- Products will be loaded here by JavaScript -->
+            </main>
+
+            <aside class="cart-section" role="complementary" aria-label="Shopping cart">
+                <h2>🛒 Your Order</h2>
+                <div class="cart-items" id="cart-items">
+                    <div class="cart-empty">
+                        Your cart is empty<br>
+                        Add products to get started!
+                    </div>
+                </div>
+
+                <div class="cart-total" id="cart-total" style="display: none;">
+                    <div class="cart-total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0</span>
+                    </div>
+                    <div class="cart-total-row total">
+                        <span>Total:</span>
+                        <span id="total">$0</span>
+                    </div>
+                </div>
+
+                <div class="payment-section" id="payment-section" style="display: none;">
+                    <h3>Payment Method</h3>
+                    <div class="payment-options">
+                        <div class="payment-option" onclick="selectPayment('efectivo', event)" onkeydown="handlePaymentKeydown('efectivo', event)" tabindex="0" role="button" aria-label="Select cash payment">
+                            <input type="radio" name="payment" id="efectivo" value="efectivo" tabindex="-1">
+                            <label for="efectivo">💵 Cash</label>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('tarjeta', event)" onkeydown="handlePaymentKeydown('tarjeta', event)" tabindex="0" role="button" aria-label="Select card payment">
+                            <input type="radio" name="payment" id="tarjeta" value="tarjeta" tabindex="-1">
+                            <label for="tarjeta">💳 Credit/Debit Card</label>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('transferencia', event)" onkeydown="handlePaymentKeydown('transferencia', event)" tabindex="0" role="button" aria-label="Select bank transfer payment">
+                            <input type="radio" name="payment" id="transferencia" value="transferencia" tabindex="-1">
+                            <label for="transferencia">🏦 Bank Transfer</label>
+                        </div>
+                        <div class="payment-option" onclick="selectPayment('contra', event)" onkeydown="handlePaymentKeydown('contra', event)" tabindex="0" role="button" aria-label="Select virtual account payment">
+                            <input type="radio" name="payment" id="contra" value="contra" tabindex="-1">
+                            <label for="contra">🔄 Virtual Account</label>
+                        </div>
+                    </div>
+
+                    <!-- Payment Forms -->
+                    <div id="payment-forms">
+                        <!-- Cash Payment Form -->
+                        <div class="payment-form" id="form-efectivo">
+                            <h4>💵 Cash Payment</h4>
+                            <p style="color: #666;">You can pay in cash when you pick up your order.</p>
+                            <div class="bank-info">
+                                <p><strong>Instructions:</strong></p>
+                                <p>• Have the exact amount ready</p>
+                                <p>• Show this order number when picking up</p>
+                                <p>• Payment desk is at the main entrance</p>
+                            </div>
+                        </div>
+
+                        <!-- Card Payment Form -->
+                        <div class="payment-form" id="form-tarjeta">
+                            <h4>💳 Card Payment</h4>
+                            <div class="form-group">
+                                <label for="card-number">Card Number</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                            </div>
+                            <div class="form-group">
+                                <label for="card-name">Cardholder Name</label>
+                                <input type="text" id="card-name" placeholder="Name as shown on card">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-expiry">Expiry Date</label>
+                                    <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="card-cvv">CVV</label>
+                                    <input type="text" id="card-cvv" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bank Transfer Form -->
+                        <div class="payment-form" id="form-transferencia">
+                            <h4>🏦 Bank Transfer</h4>
+                            <p style="color: #666; margin-bottom: 10px;">Transfer the total amount to our bank account:</p>
+                            <div class="bank-info">
+                                <p><strong>Bank:</strong> Banco Virtual</p>
+                                <p><strong>Account Number:</strong> 1234-5678-9012-3456</p>
+                                <p><strong>Account Type:</strong> Savings</p>
+                                <p><strong>Account Holder:</strong> Cafetería Virtual SAS</p>
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label for="transfer-reference">Transfer Reference Number</label>
+                                <input type="text" id="transfer-reference" placeholder="Enter your transfer reference">
+                            </div>
+                        </div>
+
+                        <!-- Virtual Account Form -->
+                        <div class="payment-form" id="form-contra">
+                            <h4>🔄 Virtual Account</h4>
+                            <div class="balance-display">
+                                <div class="balance-amount" id="virtual-balance">$0</div>
+                                <div class="balance-label">Available Balance</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="virtual-pin">Account PIN</label>
+                                <input type="password" id="virtual-pin" placeholder="Enter your 4-digit PIN" maxlength="4">
+                            </div>
+                            <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                                💡 Your balance will be automatically deducted after confirming the order.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="checkout-btn" id="checkout-btn" onclick="checkout()" disabled>
+                    Complete Order
+                </button>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Customization Modal -->
+    <div class="modal-overlay" id="customization-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-product-name">Product Name</h2>
+                <p id="modal-product-description">Product description</p>
+                <button class="modal-close" onclick="closeCustomizationModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Ingredients Section -->
+                <div class="modal-section">
+                    <h3>🍽️ Ingredients</h3>
+                    <div id="modal-ingredients-list"></div>
+                </div>
+
+                <!-- Additions Section -->
+                <div class="modal-section" id="additions-section">
+                    <h3>➕ Add Extras</h3>
+                    <div id="modal-additions-list"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="price-summary">
+                    <span class="label">Base Price:</span>
+                    <span id="modal-base-price">$0</span>
+                </div>
+                <div class="price-summary">
+                    <span class="label">Adjustments:</span>
+                    <span id="modal-adjustments">$0</span>
+                </div>
+                <div class="price-summary total">
+                    <span class="label">Total:</span>
+                    <span id="modal-total-price">$0</span>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-cancel" onclick="closeCustomizationModal()">Cancel</button>
+                    <button class="btn-add-to-cart" onclick="confirmCustomization()">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Product catalog with detailed ingredients and additions
+        const products = {
+            bebidas: [
+                { 
+                    id: 1, 
+                    name: 'Americano Coffee', 
+                    description: 'Premium black coffee made with high-quality beans', 
+                    price: 2.50,
+                    ingredients: [
+                        { name: 'Coffee', required: true, removable: false, discount: 0 },
+                        { name: 'Sugar', required: false, removable: true, discount: 0 }
+                    ],
+                    additions: [
+                        { name: 'Extra shot', price: 0.75 },
+                        { name: 'Vanilla syrup', price: 0.50 },
+                        { name: 'Caramel syrup', price: 0.50 }
+                    ]
+                },
+                { 
+                    id: 2, 
+                    name: 'Latte', 
+                    description: 'Espresso with steamed milk and foam', 
+                    price: 3.75,
+                    ingredients: [
+                        { name: 'Espresso', required: true, removable: false, discount: 0 },
+                        { name: 'Milk', required: true, removable: false, discount: 0 },
+                        { name: 'Foam', required: false, removable: true, discount: 0.25 }
+                    ],
+                    additions: [
+                        { name: 'Extra shot', price: 0.75 },
+                        { name: 'Vanilla syrup', price: 0.50 },
+                        { name: 'Almond milk', price: 0.75 }
+                    ]
+                },
+                { 
+                    id: 3, 
+                    name: 'Cappuccino', 
+                    description: 'Espresso, milk and thick foam', 
+                    price: 3.50,
+                    ingredients: [
+                        { name: 'Espresso', required: true, removable: false, discount: 0 },
+                        { name: 'Milk', required: true, removable: false, discount: 0 },
+                        { name: 'Cinnamon powder', required: false, removable: true, discount: 0.15 }
+                    ],
+                    additions: [
+                        { name: 'Extra shot', price: 0.75 },
+                        { name: 'Chocolate powder', price: 0.35 }
+                    ]
+                }
+            ],
+            alimentos: [
+                { 
+                    id: 7, 
+                    name: 'Chicken Sandwich', 
+                    description: 'Grilled chicken breast with fresh vegetables', 
+                    price: 8.50,
+                    ingredients: [
+                        { name: 'Bread', required: true, removable: false, discount: 0 },
+                        { name: 'Chicken breast', required: true, removable: false, discount: 0 },
+                        { name: 'Lettuce', required: false, removable: true, discount: 0.50 },
+                        { name: 'Tomato', required: false, removable: true, discount: 0.50 },
+                        { name: 'Cheese', required: false, removable: true, discount: 0.75 },
+                        { name: 'Mayo', required: false, removable: true, discount: 0.25 }
+                    ],
+                    additions: [
+                        { name: 'Bacon', price: 1.50 },
+                        { name: 'Extra cheese', price: 0.75 },
+                        { name: 'Avocado', price: 1.25 }
+                    ]
+                },
+                { 
+                    id: 8, 
+                    name: 'Hamburger', 
+                    description: 'Beef patty with cheese and fresh vegetables', 
+                    price: 10.00,
+                    ingredients: [
+                        { name: 'Bread', required: true, removable: false, discount: 0 },
+                        { name: 'Beef patty', required: true, removable: false, discount: 0 },
+                        { name: 'Cheese', required: false, removable: true, discount: 0.75 },
+                        { name: 'Lettuce', required: false, removable: true, discount: 0.50 },
+                        { name: 'Tomato', required: false, removable: true, discount: 0.50 },
+                        { name: 'Onion', required: false, removable: true, discount: 0.25 },
+                        { name: 'Pickles', required: false, removable: true, discount: 0.25 }
+                    ],
+                    additions: [
+                        { name: 'Bacon', price: 1.50 },
+                        { name: 'Extra patty', price: 3.00 },
+                        { name: 'Fried egg', price: 1.00 }
+                    ]
+                },
+                { 
+                    id: 11, 
+                    name: 'Personal Pizza', 
+                    description: 'Individual pizza with cheese and tomato sauce', 
+                    price: 12.00,
+                    ingredients: [
+                        { name: 'Dough', required: true, removable: false, discount: 0 },
+                        { name: 'Tomato sauce', required: true, removable: false, discount: 0 },
+                        { name: 'Mozzarella cheese', required: true, removable: false, discount: 0 },
+                        { name: 'Oregano', required: false, removable: true, discount: 0.15 }
+                    ],
+                    additions: [
+                        { name: 'Pepperoni', price: 2.00 },
+                        { name: 'Mushrooms', price: 1.25 },
+                        { name: 'Ham', price: 1.50 },
+                        { name: 'Bell peppers', price: 1.00 }
+                    ]
+                }
+            ],
+            postres: [
+                { 
+                    id: 13, 
+                    name: 'Brownie', 
+                    description: 'Chocolate brownie with walnuts', 
+                    price: 4.50,
+                    ingredients: [
+                        { name: 'Brownie base', required: true, removable: false, discount: 0 },
+                        { name: 'Walnuts', required: false, removable: true, discount: 0.50 },
+                        { name: 'Chocolate chips', required: false, removable: true, discount: 0.35 }
+                    ],
+                    additions: [
+                        { name: 'Vanilla ice cream', price: 1.50 },
+                        { name: 'Chocolate sauce', price: 0.50 }
+                    ]
+                },
+                { 
+                    id: 14, 
+                    name: 'Cheesecake', 
+                    description: 'Cream cheese tart with berry topping', 
+                    price: 5.50,
+                    ingredients: [
+                        { name: 'Cheese base', required: true, removable: false, discount: 0 },
+                        { name: 'Graham crust', required: true, removable: false, discount: 0 },
+                        { name: 'Berry topping', required: false, removable: true, discount: 0.75 }
+                    ],
+                    additions: [
+                        { name: 'Whipped cream', price: 0.50 },
+                        { name: 'Extra berries', price: 1.00 }
+                    ]
+                }
+            ]
+        };
+
+        // Shopping cart
+        let cart = [];
+        let selectedPayment = null;
+        let virtualAccountBalance = 50.00; // Virtual account balance in USD
+
+        // Initialize the page
+        function init() {
+            renderProducts();
+            updateCart();
+            updateVirtualBalance();
+        }
+
+        // Render all products
+        function renderProducts() {
+            const productsSection = document.getElementById('products-section');
+            productsSection.innerHTML = '';
+
+            const categoryNames = {
+                bebidas: '☕ Beverages',
+                alimentos: '🍔 Food',
+                postres: '🍰 Desserts'
+            };
+
+            for (const [category, items] of Object.entries(products)) {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                const categoryTitle = document.createElement('h2');
+                categoryTitle.textContent = categoryNames[category];
+                categoryDiv.appendChild(categoryTitle);
+
+                const productsGrid = document.createElement('div');
+                productsGrid.className = 'products-grid';
+
+                items.forEach(product => {
+                    const productCard = document.createElement('article');
+                    productCard.className = 'product-card';
+                    productCard.setAttribute('aria-label', `${product.name} - ${product.description} - $${product.price.toLocaleString()}`);
+                    
+                    const h3 = document.createElement('h3');
+                    h3.textContent = product.name;
+                    
+                    const p = document.createElement('p');
+                    p.textContent = product.description;
+                    
+                    const priceDiv = document.createElement('div');
+                    priceDiv.className = 'product-price';
+                    priceDiv.textContent = `$${product.price.toLocaleString()}`;
+                    priceDiv.setAttribute('aria-label', `Precio: ${product.price.toLocaleString()} pesos`);
+                    
+                    const button = document.createElement('button');
+                    button.className = 'add-to-cart-btn';
+                    button.textContent = 'Add to Cart';
+                    button.setAttribute('aria-label', `Add ${product.name} to cart`);
+                    button.onclick = () => addToCart(product.id);
+                    
+                    productCard.appendChild(h3);
+                    productCard.appendChild(p);
+                    productCard.appendChild(priceDiv);
+                    productCard.appendChild(button);
+                    
+                    productsGrid.appendChild(productCard);
+                });
+
+                categoryDiv.appendChild(productsGrid);
+                productsSection.appendChild(categoryDiv);
+            }
+        }
+
+        // Add product to cart (now opens customization modal)
+        let currentCustomization = null;
+
+        function addToCart(productId) {
+            const product = findProductById(productId);
+            if (!product) return;
+            
+            // Open customization modal
+            openCustomizationModal(product);
+        }
+
+        // Open customization modal
+        function openCustomizationModal(product) {
+            currentCustomization = {
+                product: product,
+                selectedIngredients: product.ingredients.map(ing => ({ ...ing, selected: true })),
+                selectedAdditions: product.additions.map(add => ({ ...add, selected:false }))
+            };
+
+            // Populate modal with product info
+            document.getElementById('modal-product-name').textContent = product.name;
+            document.getElementById('modal-product-description').textContent = product.description;
+            document.getElementById('modal-base-price').textContent = `$${product.price.toLocaleString()}`;
+
+            // Render ingredients
+            const ingredientsList = document.getElementById('modal-ingredients-list');
+            ingredientsList.innerHTML = '';
+            
+            currentCustomization.selectedIngredients.forEach((ing, index) => {
+                const item = document.createElement('div');
+                item.className = 'ingredient-item' + (ing.required ? ' required' : '');
+                
+                const left = document.createElement('div');
+                left.className = 'ingredient-left';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'ingredient-checkbox';
+                checkbox.checked = ing.selected;
+                checkbox.disabled = ing.required;
+                checkbox.onchange = (e) => {
+                    currentCustomization.selectedIngredients[index].selected = e.target.checked;
+                    updateModalPrices();
+                };
+                
+                const name = document.createElement('span');
+                name.className = 'ingredient-name';
+                name.textContent = ing.name;
+                
+                left.appendChild(checkbox);
+                left.appendChild(name);
+                
+                if (ing.required) {
+                    const badge = document.createElement('span');
+                    badge.className = 'ingredient-badge';
+                    badge.textContent = 'REQUIRED';
+                    left.appendChild(badge);
+                }
+                
+                const priceSpan = document.createElement('span');
+                priceSpan.className = 'ingredient-price' + (ing.discount > 0 ? ' discount' : '');
+                if (ing.discount > 0) {
+                    priceSpan.textContent = `-$${ing.discount.toLocaleString()}`;
+                }
+                
+                item.appendChild(left);
+                if (ing.discount > 0) {
+                    item.appendChild(priceSpan);
+                }
+                
+                ingredientsList.appendChild(item);
+            });
+
+            // Render additions
+            const additionsList = document.getElementById('modal-additions-list');
+            additionsList.innerHTML = '';
+            
+            if (currentCustomization.selectedAdditions.length > 0) {
+                currentCustomization.selectedAdditions.forEach((add, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'addition-item';
+                    
+                    const left = document.createElement('div');
+                    left.className = 'addition-left';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'addition-checkbox';
+                    checkbox.checked = add.selected;
+                    checkbox.onchange = (e) => {
+                        currentCustomization.selectedAdditions[index].selected = e.target.checked;
+                        updateModalPrices();
+                    };
+                    
+                    const name = document.createElement('span');
+                    name.className = 'addition-name';
+                    name.textContent = add.name;
+                    
+                    left.appendChild(checkbox);
+                    left.appendChild(name);
+                    
+                    const priceSpan = document.createElement('span');
+                    priceSpan.className = 'addition-price';
+                    priceSpan.textContent = `+$${add.price.toLocaleString()}`;
+                    
+                    item.appendChild(left);
+                    item.appendChild(priceSpan);
+                    
+                    additionsList.appendChild(item);
+                });
+                
+                document.getElementById('additions-section').style.display = 'block';
+            } else {
+                document.getElementById('additions-section').style.display = 'none';
+            }
+
+            updateModalPrices();
+            document.getElementById('customization-modal').classList.add('show');
+        }
+
+        // Update modal prices
+        function updateModalPrices() {
+            if (!currentCustomization) return;
+
+            let adjustment = 0;
+
+            // Calculate ingredient discounts
+            currentCustomization.selectedIngredients.forEach(ing => {
+                if (!ing.selected && ing.removable && ing.discount > 0) {
+                    adjustment -= ing.discount;
+                }
+            });
+
+            // Calculate addition extras
+            currentCustomization.selectedAdditions.forEach(add => {
+                if (add.selected) {
+                    adjustment += add.price;
+                }
+            });
+
+            const basePrice = currentCustomization.product.price;
+            const totalPrice = basePrice + adjustment;
+
+            const adjustmentColor = adjustment >= 0 ? '#667eea' : '#28a745';
+            const adjustmentSign = adjustment >= 0 ? '+' : '';
+
+            document.getElementById('modal-adjustments').textContent = `${adjustmentSign}$${adjustment.toLocaleString()}`;
+            document.getElementById('modal-adjustments').style.color = adjustmentColor;
+            document.getElementById('modal-total-price').textContent = `$${totalPrice.toLocaleString()}`;
+        }
+
+        // Close customization modal
+        function closeCustomizationModal() {
+            document.getElementById('customization-modal').classList.remove('show');
+            currentCustomization = null;
+        }
+
+        // Confirm customization and add to cart
+        function confirmCustomization() {
+            if (!currentCustomization) return;
+
+            // Calculate final price
+            let finalPrice = currentCustomization.product.price;
+            
+            currentCustomization.selectedIngredients.forEach(ing => {
+                if (!ing.selected && ing.removable && ing.discount > 0) {
+                    finalPrice -= ing.discount;
+                }
+            });
+            
+            currentCustomization.selectedAdditions.forEach(add => {
+                if (add.selected) {
+                    finalPrice += add.price;
+                }
+            });
+
+            // Create cart item with customization
+            const cartItem = {
+                id: Date.now(), // Use timestamp for unique ID per customization
+                productId: currentCustomization.product.id,
+                name: currentCustomization.product.name,
+                price: finalPrice,
+                originalPrice: currentCustomization.product.price,
+                quantity: 1,
+                customization: {
+                    ingredients: currentCustomization.selectedIngredients.filter(ing => ing.selected).map(ing => ing.name),
+                    additions: currentCustomization.selectedAdditions.filter(add => add.selected).map(add => add.name)
+                }
+            };
+
+            // Check if same customized product exists
+            const existingItem = cart.find(item => 
+                item.productId === cartItem.productId && 
+                JSON.stringify(item.customization) === JSON.stringify(cartItem.customization)
+            );
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push(cartItem);
+            }
+
+            showNotification(`✅ ${currentCustomization.product.name} added to cart!`, 2000);
+            updateCart();
+            closeCustomizationModal();
+        }
+
+        // Find product by ID
+        function findProductById(id) {
+            for (const category of Object.values(products)) {
+                const product = category.find(p => p.id === id);
+                if (product) return product;
+            }
+            return null;
+        }
+
+        // Update quantity
+        function updateQuantity(productId, change) {
+            const cartItem = cart.find(item => item.id === productId);
+            if (!cartItem) return;
+
+            cartItem.quantity += change;
+            if (cartItem.quantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                updateCart();
+            }
+        }
+
+        // Remove from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // Update cart display
+        function updateCart() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            const cartTotalDiv = document.getElementById('cart-total');
+            const paymentSection = document.getElementById('payment-section');
+            const checkoutBtn = document.getElementById('checkout-btn');
+
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '';
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'cart-empty';
+                
+                // Create text nodes without using innerHTML
+                const line1 = document.createTextNode('Your cart is empty');
+                const br = document.createElement('br');
+                const line2 = document.createTextNode('Add products to get started!');
+                
+                emptyDiv.appendChild(line1);
+                emptyDiv.appendChild(br);
+                emptyDiv.appendChild(line2);
+                
+                cartItemsDiv.appendChild(emptyDiv);
+                cartTotalDiv.style.display = 'none';
+                paymentSection.style.display = 'none';
+                checkoutBtn.disabled = true;
+            } else {
+                cartItemsDiv.innerHTML = '';
+                cart.forEach(item => {
+                    const cartItemDiv = document.createElement('div');
+                    cartItemDiv.className = 'cart-item';
+                    
+                    const itemInfo = document.createElement('div');
+                    itemInfo.className = 'cart-item-info';
+                    
+                    const itemName = document.createElement('div');
+                    itemName.className = 'cart-item-name';
+                    itemName.textContent = item.name;
+                    
+                    const itemPrice = document.createElement('div');
+                    itemPrice.className = 'cart-item-price';
+                    itemPrice.textContent = `$${item.price.toLocaleString()} c/u`;
+                    
+                    itemInfo.appendChild(itemName);
+                    itemInfo.appendChild(itemPrice);
+                    
+                    const controls = document.createElement('div');
+                    controls.className = 'cart-item-controls';
+                    
+                    const decreaseBtn = document.createElement('button');
+                    decreaseBtn.className = 'quantity-btn';
+                    decreaseBtn.textContent = '-';
+                    decreaseBtn.setAttribute('aria-label', `Decrease quantity of ${item.name}`);
+                    decreaseBtn.onclick = () => updateQuantity(item.id, -1);
+                    
+                    const quantitySpan = document.createElement('span');
+                    quantitySpan.className = 'quantity';
+                    quantitySpan.textContent = item.quantity;
+                    quantitySpan.setAttribute('aria-label', `Quantity: ${item.quantity}`);
+                    
+                    const increaseBtn = document.createElement('button');
+                    increaseBtn.className = 'quantity-btn';
+                    increaseBtn.textContent = '+';
+                    increaseBtn.setAttribute('aria-label', `Increase quantity of ${item.name}`);
+                    increaseBtn.onclick = () => updateQuantity(item.id, 1);
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.textContent = '✕';
+                    removeBtn.setAttribute('aria-label', `Remove ${item.name} from cart`);
+                    removeBtn.onclick = () => removeFromCart(item.id);
+                    
+                    controls.appendChild(decreaseBtn);
+                    controls.appendChild(quantitySpan);
+                    controls.appendChild(increaseBtn);
+                    controls.appendChild(removeBtn);
+                    
+                    cartItemDiv.appendChild(itemInfo);
+                    cartItemDiv.appendChild(controls);
+                    
+                    cartItemsDiv.appendChild(cartItemDiv);
+                });
+
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                document.getElementById('subtotal').textContent = `$${subtotal.toLocaleString()}`;
+                document.getElementById('total').textContent = `$${subtotal.toLocaleString()}`;
+
+                cartTotalDiv.style.display = 'block';
+                paymentSection.style.display = 'block';
+                checkoutBtn.disabled = !selectedPayment;
+            }
+        }
+
+        // Select payment method
+        function selectPayment(method, event) {
+            selectedPayment = method;
+            
+            // Update visual selection
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            document.getElementById(method).checked = true;
+            
+            // Hide all payment forms
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Show selected payment form
+            const selectedForm = document.getElementById(`form-${method}`);
+            if (selectedForm) {
+                selectedForm.classList.add('active');
+            }
+            
+            // Enable checkout button
+            document.getElementById('checkout-btn').disabled = false;
+        }
+
+        // Handle keyboard events for payment options
+        function handlePaymentKeydown(method, event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                selectPayment(method, event);
+            }
+        }
+
+        // Update virtual balance display
+        function updateVirtualBalance() {
+            const balanceElement = document.getElementById('virtual-balance');
+            if (balanceElement) {
+                balanceElement.textContent = `$${virtualAccountBalance.toLocaleString()}`;
+            }
+        }
+
+        // Validate payment details
+        function validatePaymentDetails() {
+            if (!selectedPayment) return false;
+
+            switch(selectedPayment) {
+                case 'tarjeta':
+                    const cardNumber = document.getElementById('card-number').value.trim();
+                    const cardName = document.getElementById('card-name').value.trim();
+                    const cardExpiry = document.getElementById('card-expiry').value.trim();
+                    const cardCvv = document.getElementById('card-cvv').value.trim();
+                    
+                    if (!cardNumber || !cardName || !cardExpiry || !cardCvv) {
+                        showNotification('❌ Please complete all card details', 3000);
+                        return false;
+                    }
+                    break;
+
+                case 'transferencia':
+                    const transferRef = document.getElementById('transfer-reference').value.trim();
+                    if (!transferRef) {
+                        showNotification('❌ Please enter your transfer reference number', 3000);
+                        return false;
+                    }
+                    break;
+
+                case 'contra':
+                    const pin = document.getElementById('virtual-pin').value.trim();
+                    if (!pin || pin.length !== 4) {
+                        showNotification('❌ Please enter a valid 4-digit PIN', 3000);
+                        return false;
+                    }
+                    
+                    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    if (total > virtualAccountBalance) {
+                        showNotification('❌ Insufficient balance in virtual account', 3000);
+                        return false;
+                    }
+                    break;
+
+                case 'efectivo':
+                    // Cash doesn't need validation
+                    break;
+            }
+
+            return true;
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0 || !selectedPayment) return;
+
+            // Validate payment details
+            if (!validatePaymentDetails()) {
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const paymentNames = {
+                efectivo: 'Cash',
+                tarjeta: 'Card',
+                transferencia: 'Transfer',
+                contra: 'Virtual Account'
+            };
+
+            // Deduct from virtual account if that payment method was used
+            if (selectedPayment === 'contra') {
+                virtualAccountBalance -= total;
+                updateVirtualBalance();
+            }
+
+            // Show custom confirmation message
+            const confirmationMsg = 
+                `Order Confirmed! 🎉\n\n` +
+                `Total: $${total.toLocaleString()}\n` +
+                `Payment method: ${paymentNames[selectedPayment]}\n\n` +
+                `Your order is being processed.\nYou will receive a confirmation soon.`;
+            
+            showNotification(confirmationMsg, 4000);
+
+            // Reset cart and forms
+            cart = [];
+            selectedPayment = null;
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll('input[name="payment"]').forEach(input => {
+                input.checked = false;
+            });
+            
+            // Hide all payment forms
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Clear form inputs
+            document.getElementById('card-number').value = '';
+            document.getElementById('card-name').value = '';
+            document.getElementById('card-expiry').value = '';
+            document.getElementById('card-cvv').value = '';
+            document.getElementById('transfer-reference').value = '';
+            document.getElementById('virtual-pin').value = '';
+            
+            updateCart();
+        }
+
+        // Show notification
+        function showNotification(message, duration = 2000) {
+            const notification = document.getElementById('notification');
+            // Clear previous content
+            notification.innerHTML = '';
+            
+            // Split multi-line messages and create proper elements
+            const lines = message.split('\n');
+            lines.forEach((line, index) => {
+                if (line.trim()) {
+                    const lineElement = document.createElement('div');
+                    lineElement.textContent = line;
+                    notification.appendChild(lineElement);
+                }
+            });
+            
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, duration);
+        }
+
+        // Initialize on page load
+        window.onload = init;
+    </script>
+</body>
+</html>
