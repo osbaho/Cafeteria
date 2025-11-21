@@ -1,124 +1,125 @@
-# Cafetería Virtual 🍽️
+# Virtual Cafeteria 🍽️
 
-Sistema de cafetería para contras virtual y solicitudes online
+Virtual cafeteria system for online orders
 
-## Descripción
+## Description
 
-Plataforma web para realizar pedidos online en la cafetería con funcionalidades de:
-- Catálogo de productos (bebidas, alimentos, postres)
-- Carrito de compras interactivo
-- Múltiples métodos de pago
-- Interfaz responsive y fácil de usar
-- **🔒 Seguridad XSS de nivel empresarial**
+Web platform for placing online orders at the cafeteria with features for:
+- Product catalog (beverages, food, desserts)
+- Interactive shopping cart
+- Multiple payment methods
+- Responsive and user-friendly interface
+- **🔒 Enterprise-level XSS security**
 
-## Características
+## Features
 
-### Catálogo de Productos
-- **☕ Bebidas**: Café, jugos, té, chocolate caliente
-- **🍔 Alimentos**: Sándwiches, hamburguesas, ensaladas, pasta, pizza
-- **🍰 Postres**: Brownies, cheesecake, helados, tiramisú
+### Product Catalog
+- **☕ Beverages**: Coffee, juices, tea, hot chocolate
+- **🍔 Food**: Sandwiches, hamburgers, salads, pasta, pizza
+- **🍰 Desserts**: Brownies, cheesecake, ice cream, tiramisu
 
-### Funcionalidades
-- ✅ Agregar/quitar productos del carrito
-- ✅ Ajustar cantidades de productos
-- ✅ Cálculo automático del total
-- ✅ Selección de método de pago:
-  - 💵 Efectivo
-  - 💳 Tarjeta de Crédito/Débito
-  - 🏦 Transferencia Bancaria
-  - 🔄 Contra Virtual
-- ✅ Confirmación de pedido
-- ✅ Diseño responsive (móvil y escritorio)
-- ✅ Accesibilidad WCAG 2.1 AA compliant
+### Functionality
+- ✅ Add/remove products from cart
+- ✅ Adjust product quantities
+- ✅ Automatic total calculation
+- ✅ Payment method selection:
+  - 💵 Cash
+  - 💳 Credit/Debit Card
+  - 🏦 Bank Transfer
+  - 🔄 Virtual Account
+- ✅ Order confirmation
+- ✅ Responsive design (mobile and desktop)
+- ✅ WCAG 2.1 AA compliant accessibility
 
-### 🔒 Seguridad
+### 🔒 Security
 
-Esta aplicación cuenta con **múltiples capas de protección XSS**:
+This application features **multiple layers of XSS protection**:
 - Content Security Policy (CSP)
-- Headers de seguridad HTTP
-- Manipulación segura del DOM (DOM API pura)
-- Suite de pruebas de seguridad automatizadas
+- HTTP security headers
+- Secure DOM manipulation (pure DOM API)
+- Automated security test suite
 
-📖 **Ver [SECURITY.md](SECURITY.md)** para documentación completa de seguridad
+📖 **See [SECURITY.md](SECURITY.md)** for complete security documentation
 
-## Uso
+## Usage
 
-1. Abre el archivo `index.html` en tu navegador web
-2. Explora el catálogo de productos organizados por categorías
-3. Haz clic en "Agregar al Carrito" para los productos que desees
-4. Ajusta las cantidades usando los botones + y - en el carrito
-5. Selecciona tu método de pago preferido
-6. Haz clic en "Finalizar Pedido" para confirmar
+1. Open the `index.html` file in your web browser
+2. Browse the product catalog organized by categories
+3. Click "Add to Cart" for the products you want
+4. Adjust quantities using the + and - buttons in the cart
+5. Select your preferred payment method
+6. Click "Complete Order" to confirm
 
-## Instalación
+## Installation
 
-No se requiere instalación. Simplemente abre el archivo `index.html` en cualquier navegador web moderno:
+No installation required. Simply open the `index.html` file in any modern web browser:
 
 ```bash
-# Opción 1: Abrir directamente
+# Option 1: Open directly
 open index.html
 
-# Opción 2: Usar un servidor local
+# Option 2: Use a local server
 python -m http.server 8000
-# Luego visita http://localhost:8000
+# Then visit http://localhost:8000
 
-# Opción 3: Con Node.js
+# Option 3: With Node.js
 npx http-server
 ```
 
-## Pruebas de Seguridad
+## Security Tests
 
-Para ejecutar la suite de pruebas de seguridad XSS:
+To run the XSS security test suite:
 
 ```bash
-# Iniciar servidor
+# Start server
 python -m http.server 8000
 
-# Abrir en navegador
+# Open in browser
 open http://localhost:8000/test-xss-security.html
 ```
 
-La suite ejecutará 25+ pruebas verificando todas las capas de seguridad.
+The suite will run 25+ tests verifying all security layers.
 
-## Tecnologías
+## Technologies
 
-- HTML5 semántico
-- CSS3 (con gradientes, animaciones y organización por secciones)
-- JavaScript vanilla ES6+ (sin dependencias)
-- DOM API pura para máxima seguridad
+- Semantic HTML5
+- CSS3 (with gradients, animations and section organization)
+- Vanilla JavaScript ES6+ (no dependencies)
+- Pure DOM API for maximum security
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 Cafeteria/
-├── index.html              # Página principal con toda la funcionalidad
-├── test-xss-security.html  # Suite de pruebas de seguridad XSS
-├── SECURITY.md             # Documentación completa de seguridad
-├── README.md               # Este archivo
-├── LICENSE                 # Licencia del proyecto
-└── .gitignore             # Archivos ignorados por git
+├── index.html              # Main page with all functionality
+├── test-xss-security.html  # XSS security test suite
+├── test-functional.html    # Functional test suite
+├── SECURITY.md             # Complete security documentation
+├── README.md               # This file
+├── LICENSE                 # Project license
+└── .gitignore             # Files ignored by git
 ```
 
-## Capturas de Pantalla
+## Screenshots
 
-La interfaz incluye:
-- Header con gradiente atractivo
-- Sección de productos con tarjetas interactivas
-- Carrito lateral sticky con control de cantidades
-- Sección de métodos de pago
-- Notificaciones visuales al agregar productos
+The interface includes:
+- Header with attractive gradient
+- Product section with interactive cards
+- Sticky side cart with quantity controls
+- Payment methods section
+- Visual notifications when adding products
 
-## Seguridad
+## Security
 
-### Capas de Protección Implementadas:
+### Implemented Protection Layers:
 
-1. **Content Security Policy (CSP)** - Políticas restrictivas
+1. **Content Security Policy (CSP)** - Restrictive policies
 2. **Security Headers** - X-Content-Type-Options, X-Frame-Options, etc.
 3. **DOM Manipulation** - 100% createElement + textContent
-4. **Automated Testing** - Suite con 25+ pruebas
+4. **Automated Testing** - Suite with 25+ tests
 
-Ver [SECURITY.md](SECURITY.md) para detalles completos.
+See [SECURITY.md](SECURITY.md) for complete details.
 
-## Licencia
+## License
 
-Ver archivo LICENSE para más detalles.
+See LICENSE file for more details.
