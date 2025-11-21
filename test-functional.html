@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pruebas Funcionales - Cafetería Virtual</title>
+    <title>Functional Tests - Virtual Cafeteria</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -92,51 +92,51 @@
     </style>
 </head>
 <body>
-    <h1>🧪 Suite de Pruebas Funcionales</h1>
-    <p>Esta herramienta prueba todas las funcionalidades principales de la Cafetería Virtual.</p>
+    <h1>🧪 Functional Test Suite</h1>
+    <p>This tool tests all main features of the Virtual Cafeteria.</p>
 
     <div class="summary" id="summary">
-        <h2>📊 Resumen de Pruebas</h2>
+        <h2>📊 Test Summary</h2>
         <div class="stats">
             <div class="stat-box">
                 <div class="stat-number" id="total-tests">0</div>
-                <div>Total de Pruebas</div>
+                <div>Total Tests</div>
             </div>
             <div class="stat-box">
                 <div class="stat-number" id="passed-tests">0</div>
-                <div>✅ Aprobadas</div>
+                <div>✅ Passed</div>
             </div>
             <div class="stat-box">
                 <div class="stat-number" id="failed-tests">0</div>
-                <div>❌ Falladas</div>
+                <div>❌ Failed</div>
             </div>
         </div>
     </div>
 
-    <button onclick="runAllTests()">▶️ Ejecutar Todas las Pruebas</button>
-    <button onclick="clearResults()">🗑️ Limpiar Resultados</button>
+    <button onclick="runAllTests()">▶️ Run All Tests</button>
+    <button onclick="clearResults()">🗑️ Clear Results</button>
 
     <div class="test-section">
-        <h2>🛒 Gestión de Carrito</h2>
-        <p>Prueba las operaciones del carrito de compras.</p>
+        <h2>🛒 Cart Management</h2>
+        <p>Tests shopping cart operations.</p>
         <div id="cart-tests"></div>
     </div>
 
     <div class="test-section">
-        <h2>💰 Cálculos y Totales</h2>
-        <p>Verifica que los cálculos de precios sean correctos.</p>
+        <h2>💰 Calculations and Totals</h2>
+        <p>Verifies that price calculations are correct.</p>
         <div id="calculation-tests"></div>
     </div>
 
     <div class="test-section">
-        <h2>💳 Métodos de Pago</h2>
-        <p>Prueba la selección de métodos de pago.</p>
+        <h2>💳 Payment Methods</h2>
+        <p>Tests payment method selection.</p>
         <div id="payment-tests"></div>
     </div>
 
     <div class="test-section">
-        <h2>✅ Proceso de Checkout</h2>
-        <p>Verifica el proceso completo de finalización de pedido.</p>
+        <h2>✅ Checkout Process</h2>
+        <p>Verifies the complete order completion process.</p>
         <div id="checkout-tests"></div>
     </div>
 
@@ -616,15 +616,15 @@
 
         async function runAllTests() {
             clearResults();
-            console.log('🧪 Iniciando Suite de Pruebas Funcionales...');
+            console.log('🧪 Starting Functional Test Suite...');
             
             await testCartOperations();
             await testCalculations();
             await testPaymentMethods();
             await testCheckout();
 
-            console.log('✅ Pruebas completadas!');
-            console.log(`Total: ${testResults.total}, Aprobadas: ${testResults.passed}, Falladas: ${testResults.failed}`);
+            console.log('✅ Tests completed!');
+            console.log(`Total: ${testResults.total}, Passed: ${testResults.passed}, Failed: ${testResults.failed}`);
             
             // Clean up iframe
             if (testFrame) {
@@ -643,8 +643,8 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            console.log('📋 Suite de Pruebas Funcionales cargada');
-            console.log('Haz clic en "Ejecutar Todas las Pruebas" para comenzar');
+            console.log('📋 Functional Test Suite loaded');
+            console.log('Click "Run All Tests" to begin');
         });
     </script>
 </body>
