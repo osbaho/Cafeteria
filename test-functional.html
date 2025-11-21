@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas Funcionales - Cafetería Virtual</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f9f9f9;
+        }
+        .test-case h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .test-result {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .summary h2 {
+            margin-top: 0;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Suite de Pruebas Funcionales</h1>
+    <p>Esta herramienta prueba todas las funcionalidades principales de la Cafetería Virtual.</p>
+
+    <div class="summary" id="summary">
+        <h2>📊 Resumen de Pruebas</h2>
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="total-tests">0</div>
+                <div>Total de Pruebas</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="passed-tests">0</div>
+                <div>✅ Aprobadas</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="failed-tests">0</div>
+                <div>❌ Falladas</div>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="runAllTests()">▶️ Ejecutar Todas las Pruebas</button>
+    <button onclick="clearResults()">🗑️ Limpiar Resultados</button>
+
+    <div class="test-section">
+        <h2>🛒 Gestión de Carrito</h2>
+        <p>Prueba las operaciones del carrito de compras.</p>
+        <div id="cart-tests"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>💰 Cálculos y Totales</h2>
+        <p>Verifica que los cálculos de precios sean correctos.</p>
+        <div id="calculation-tests"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>💳 Métodos de Pago</h2>
+        <p>Prueba la selección de métodos de pago.</p>
+        <div id="payment-tests"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Proceso de Checkout</h2>
+        <p>Verifica el proceso completo de finalización de pedido.</p>
+        <div id="checkout-tests"></div>
+    </div>
+
+    <script>
+        let testResults = {
+            total: 0,
+            passed: 0,
+            failed: 0
+        };
+
+        // Open index.html in an iframe for testing
+        let testFrame;
+
+        function setupTestFrame() {
+            // Clean up existing iframe
+            if (testFrame) {
+                document.body.removeChild(testFrame);
+            }
+            
+            testFrame = document.createElement('iframe');
+            testFrame.src = 'index.html';
+            testFrame.style.display = 'none';
+            document.body.appendChild(testFrame);
+            
+            return new Promise((resolve) => {
+                testFrame.onload = () => {
+                    // Wait a bit for scripts to initialize
+                    setTimeout(resolve, 500);
+                };
+            });
+        }
+
+        function getTestFrameWindow() {
+            return testFrame.contentWindow;
+        }
+
+        function updateSummary() {
+            document.getElementById('total-tests').textContent = testResults.total;
+            document.getElementById('passed-tests').textContent = testResults.passed;
+            document.getElementById('failed-tests').textContent = testResults.failed;
+        }
+
+        function addTestResult(containerId, testName, passed, message) {
+            testResults.total++;
+            if (passed) {
+                testResults.passed++;
+            } else {
+                testResults.failed++;
+            }
+
+            const container = document.getElementById(containerId);
+            const testCase = document.createElement('div');
+            testCase.className = 'test-case';
+            
+            const testTitle = document.createElement('h3');
+            testTitle.textContent = testName;
+            testCase.appendChild(testTitle);
+
+            const result = document.createElement('div');
+            result.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            result.textContent = message;
+            testCase.appendChild(result);
+
+            container.appendChild(testCase);
+            updateSummary();
+        }
+
+        async function testCartOperations() {
+            const container = document.getElementById('cart-tests');
+            container.innerHTML = '';
+
+            await setupTestFrame();
+            const win = getTestFrameWindow();
+
+            // Test 1: Initial cart should be empty
+            if (win.cart && win.cart.length === 0) {
+                addTestResult('cart-tests', 
+                    'Carrito Inicial Vacío', 
+                    true, 
+                    '✅ El carrito inicia vacío correctamente'
+                );
+            } else {
+                addTestResult('cart-tests', 
+                    'Carrito Inicial Vacío', 
+                    false, 
+                    '❌ El carrito no inicia vacío'
+                );
+            }
+
+            // Test 2: Add product to cart
+            const initialLength = win.cart.length;
+            win.addToCart(1); // Add Café Americano
+            if (win.cart.length === initialLength + 1) {
+                addTestResult('cart-tests', 
+                    'Agregar Producto al Carrito', 
+                    true, 
+                    '✅ Producto agregado correctamente al carrito'
+                );
+            } else {
+                addTestResult('cart-tests', 
+                    'Agregar Producto al Carrito', 
+                    false, 
+                    '❌ No se pudo agregar producto al carrito'
+                );
+            }
+
+            // Test 3: Add same product increases quantity
+            win.addToCart(1); // Add same product again
+            if (win.cart[0] && win.cart[0].quantity === 2) {
+                addTestResult('cart-tests', 
+                    'Incrementar Cantidad de Producto', 
+                    true, 
+                    '✅ La cantidad se incrementa al agregar el mismo producto'
+                );
+            } else {
+                addTestResult('cart-tests', 
+                    'Incrementar Cantidad de Producto', 
+                    false, 
+                    '❌ La cantidad no se incrementa correctamente'
+                );
+            }
+
+            // Test 4: Update quantity manually
+            win.updateQuantity(1, 1); // Increase by 1
+            if (win.cart[0] && win.cart[0].quantity === 3) {
+                addTestResult('cart-tests', 
+                    'Actualizar Cantidad Manualmente', 
+                    true, 
+                    '✅ La cantidad se actualiza correctamente con los botones +/-'
+                );
+            } else {
+                addTestResult('cart-tests', 
+                    'Actualizar Cantidad Manualmente', 
+                    false, 
+                    '❌ La cantidad no se actualiza correctamente'
+                );
+            }
+
+            // Test 5: Decrease quantity
+            win.updateQuantity(1, -2); // Decrease by 2
+            if (win.cart[0] && win.cart[0].quantity === 1) {
+                addTestResult('cart-tests', 
+                    'Disminuir Cantidad', 
+                    true, 
+                    '✅ La cantidad disminuye correctamente'
+                );
+            } else {
+                addTestResult('cart-tests', 
+                    'Disminuir Cantidad', 
+                    false, 
+                    '❌ La cantidad no disminuye correctamente'
+                );
+            }
+
+            // Test 6: Remove product when quantity reaches 0
+            win.updateQuantity(1, -1); // Should remove product
+            if (win.cart.length === 0) {
+                addTestResult('cart-tests', 
+                    'Eliminar Producto al Llegar a Cantidad 0', 
+                    true, 
+                    '✅ El producto se elimina cuando la cantidad llega a 0'
+                );
+            } else {
+                addTestResult('cart-tests', 
+                    'Eliminar Producto al Llegar a Cantidad 0', 
+                    false, 
+                    '❌ El producto no se elimina correctamente'
+                );
+            }
+
+            // Test 7: Remove product directly
+            win.addToCart(1);
+            win.removeFromCart(1);
+            if (win.cart.length === 0) {
+                addTestResult('cart-tests', 
+                    'Eliminar Producto Directamente', 
+                    true, 
+                    '✅ El producto se elimina correctamente con el botón ✕'
+                );
+            } else {
+                addTestResult('cart-tests', 
+                    'Eliminar Producto Directamente', 
+                    false, 
+                    '❌ El producto no se elimina correctamente'
+                );
+            }
+
+            // Test 8: Multiple different products
+            win.addToCart(1); // Café Americano
+            win.addToCart(7); // Sándwich
+            win.addToCart(13); // Brownie
+            if (win.cart.length === 3) {
+                addTestResult('cart-tests', 
+                    'Múltiples Productos Diferentes', 
+                    true, 
+                    '✅ Se pueden agregar múltiples productos diferentes'
+                );
+            } else {
+                addTestResult('cart-tests', 
+                    'Múltiples Productos Diferentes', 
+                    false, 
+                    '❌ No se manejan correctamente múltiples productos'
+                );
+            }
+        }
+
+        async function testCalculations() {
+            const container = document.getElementById('calculation-tests');
+            container.innerHTML = '';
+
+            await setupTestFrame();
+            const win = getTestFrameWindow();
+
+            // Test 1: Single product total
+            win.addToCart(1); // Café Americano - $2,500
+            const total1 = win.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            if (total1 === 2500) {
+                addTestResult('calculation-tests', 
+                    'Cálculo de Total - Producto Único', 
+                    true, 
+                    '✅ El total se calcula correctamente para un producto'
+                );
+            } else {
+                addTestResult('calculation-tests', 
+                    'Cálculo de Total - Producto Único', 
+                    false, 
+                    `❌ Total incorrecto: esperado 2500, obtenido ${total1}`
+                );
+            }
+
+            // Test 2: Multiple quantities of same product
+            win.addToCart(1); // Add again
+            win.addToCart(1); // And again
+            const total2 = win.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            if (total2 === 7500) {
+                addTestResult('calculation-tests', 
+                    'Cálculo de Total - Múltiples Cantidades', 
+                    true, 
+                    '✅ El total se calcula correctamente con múltiples cantidades'
+                );
+            } else {
+                addTestResult('calculation-tests', 
+                    'Cálculo de Total - Múltiples Cantidades', 
+                    false, 
+                    `❌ Total incorrecto: esperado 7500, obtenido ${total2}`
+                );
+            }
+
+            // Test 3: Multiple different products
+            win.cart = []; // Clear cart
+            win.addToCart(1); // Café - $2,500
+            win.addToCart(8); // Hamburguesa - $9,000
+            win.addToCart(14); // Cheesecake - $4,500
+            const total3 = win.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            if (total3 === 16000) {
+                addTestResult('calculation-tests', 
+                    'Cálculo de Total - Múltiples Productos', 
+                    true, 
+                    '✅ El total se calcula correctamente con múltiples productos'
+                );
+            } else {
+                addTestResult('calculation-tests', 
+                    'Cálculo de Total - Múltiples Productos', 
+                    false, 
+                    `❌ Total incorrecto: esperado 16000, obtenido ${total3}`
+                );
+            }
+
+            // Test 4: Verify product prices are correct
+            const product1 = win.findProductById(1);
+            const product8 = win.findProductById(8);
+            const product14 = win.findProductById(14);
+            
+            if (product1.price === 2500 && product8.price === 9000 && product14.price === 4500) {
+                addTestResult('calculation-tests', 
+                    'Precios de Productos Correctos', 
+                    true, 
+                    '✅ Los precios de los productos son correctos'
+                );
+            } else {
+                addTestResult('calculation-tests', 
+                    'Precios de Productos Correctos', 
+                    false, 
+                    '❌ Algunos precios de productos son incorrectos'
+                );
+            }
+        }
+
+        async function testPaymentMethods() {
+            const container = document.getElementById('payment-tests');
+            container.innerHTML = '';
+
+            await setupTestFrame();
+            const win = getTestFrameWindow();
+
+            // Test 1: Initial payment selection should be null
+            if (win.selectedPayment === null) {
+                addTestResult('payment-tests', 
+                    'Selección de Pago Inicial', 
+                    true, 
+                    '✅ No hay método de pago seleccionado inicialmente'
+                );
+            } else {
+                addTestResult('payment-tests', 
+                    'Selección de Pago Inicial', 
+                    false, 
+                    '❌ Hay un método de pago seleccionado por defecto'
+                );
+            }
+
+            // Test 2: Can select payment method
+            const mockEvent = { currentTarget: win.document.getElementById('efectivo').parentElement };
+            win.selectPayment('efectivo', mockEvent);
+            if (win.selectedPayment === 'efectivo') {
+                addTestResult('payment-tests', 
+                    'Seleccionar Método de Pago', 
+                    true, 
+                    '✅ Se puede seleccionar un método de pago'
+                );
+            } else {
+                addTestResult('payment-tests', 
+                    'Seleccionar Método de Pago', 
+                    false, 
+                    '❌ No se pudo seleccionar método de pago'
+                );
+            }
+
+            // Test 3: Can change payment method
+            const mockEvent2 = { currentTarget: win.document.getElementById('tarjeta').parentElement };
+            win.selectPayment('tarjeta', mockEvent2);
+            if (win.selectedPayment === 'tarjeta') {
+                addTestResult('payment-tests', 
+                    'Cambiar Método de Pago', 
+                    true, 
+                    '✅ Se puede cambiar el método de pago'
+                );
+            } else {
+                addTestResult('payment-tests', 
+                    'Cambiar Método de Pago', 
+                    false, 
+                    '❌ No se pudo cambiar el método de pago'
+                );
+            }
+
+            // Test 4: All payment methods available
+            const paymentMethods = ['efectivo', 'tarjeta', 'transferencia', 'contra'];
+            const allAvailable = paymentMethods.every(method => 
+                win.document.getElementById(method) !== null
+            );
+            
+            if (allAvailable) {
+                addTestResult('payment-tests', 
+                    'Métodos de Pago Disponibles', 
+                    true, 
+                    '✅ Todos los métodos de pago están disponibles (efectivo, tarjeta, transferencia, contra)'
+                );
+            } else {
+                addTestResult('payment-tests', 
+                    'Métodos de Pago Disponibles', 
+                    false, 
+                    '❌ Faltan algunos métodos de pago'
+                );
+            }
+        }
+
+        async function testCheckout() {
+            const container = document.getElementById('checkout-tests');
+            container.innerHTML = '';
+
+            await setupTestFrame();
+            const win = getTestFrameWindow();
+
+            // Test 1: Checkout button disabled when cart empty
+            const checkoutBtn = win.document.getElementById('checkout-btn');
+            if (checkoutBtn.disabled) {
+                addTestResult('checkout-tests', 
+                    'Botón Deshabilitado con Carrito Vacío', 
+                    true, 
+                    '✅ El botón de checkout está deshabilitado cuando el carrito está vacío'
+                );
+            } else {
+                addTestResult('checkout-tests', 
+                    'Botón Deshabilitado con Carrito Vacío', 
+                    false, 
+                    '❌ El botón de checkout no está deshabilitado con carrito vacío'
+                );
+            }
+
+            // Test 2: Checkout button disabled without payment method
+            win.addToCart(1);
+            win.updateCart();
+            if (checkoutBtn.disabled) {
+                addTestResult('checkout-tests', 
+                    'Botón Deshabilitado sin Método de Pago', 
+                    true, 
+                    '✅ El botón de checkout está deshabilitado sin método de pago'
+                );
+            } else {
+                addTestResult('checkout-tests', 
+                    'Botón Deshabilitado sin Método de Pago', 
+                    false, 
+                    '❌ El botón de checkout no se deshabilita sin método de pago'
+                );
+            }
+
+            // Test 3: Checkout button enabled with items and payment
+            const mockEvent = { currentTarget: win.document.getElementById('efectivo').parentElement };
+            win.selectPayment('efectivo', mockEvent);
+            if (!checkoutBtn.disabled) {
+                addTestResult('checkout-tests', 
+                    'Botón Habilitado con Items y Pago', 
+                    true, 
+                    '✅ El botón de checkout se habilita con items y método de pago'
+                );
+            } else {
+                addTestResult('checkout-tests', 
+                    'Botón Habilitado con Items y Pago', 
+                    false, 
+                    '❌ El botón de checkout no se habilita correctamente'
+                );
+            }
+
+            // Test 4: Checkout clears cart
+            const cartLength = win.cart.length;
+            win.checkout();
+            if (win.cart.length === 0 && cartLength > 0) {
+                addTestResult('checkout-tests', 
+                    'Checkout Limpia el Carrito', 
+                    true, 
+                    '✅ El checkout limpia el carrito correctamente'
+                );
+            } else {
+                addTestResult('checkout-tests', 
+                    'Checkout Limpia el Carrito', 
+                    false, 
+                    '❌ El checkout no limpia el carrito'
+                );
+            }
+
+            // Test 5: Checkout resets payment selection
+            if (win.selectedPayment === null) {
+                addTestResult('checkout-tests', 
+                    'Checkout Resetea Selección de Pago', 
+                    true, 
+                    '✅ El checkout resetea la selección de pago'
+                );
+            } else {
+                addTestResult('checkout-tests', 
+                    'Checkout Resetea Selección de Pago', 
+                    false, 
+                    '❌ El checkout no resetea la selección de pago'
+                );
+            }
+
+            // Test 6: Complete order flow
+            win.addToCart(1);
+            win.addToCart(8);
+            const mockEvent2 = { currentTarget: win.document.getElementById('tarjeta').parentElement };
+            win.selectPayment('tarjeta', mockEvent2);
+            const totalBeforeCheckout = win.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            win.checkout();
+            
+            if (win.cart.length === 0 && win.selectedPayment === null && totalBeforeCheckout > 0) {
+                addTestResult('checkout-tests', 
+                    'Flujo Completo de Pedido', 
+                    true, 
+                    '✅ El flujo completo de pedido funciona correctamente'
+                );
+            } else {
+                addTestResult('checkout-tests', 
+                    'Flujo Completo de Pedido', 
+                    false, 
+                    '❌ El flujo completo de pedido tiene errores'
+                );
+            }
+        }
+
+        async function runAllTests() {
+            clearResults();
+            console.log('🧪 Iniciando Suite de Pruebas Funcionales...');
+            
+            await testCartOperations();
+            await testCalculations();
+            await testPaymentMethods();
+            await testCheckout();
+
+            console.log('✅ Pruebas completadas!');
+            console.log(`Total: ${testResults.total}, Aprobadas: ${testResults.passed}, Falladas: ${testResults.failed}`);
+            
+            // Clean up iframe
+            if (testFrame) {
+                document.body.removeChild(testFrame);
+                testFrame = null;
+            }
+        }
+
+        function clearResults() {
+            testResults = { total: 0, passed: 0, failed: 0 };
+            document.getElementById('cart-tests').innerHTML = '';
+            document.getElementById('calculation-tests').innerHTML = '';
+            document.getElementById('payment-tests').innerHTML = '';
+            document.getElementById('checkout-tests').innerHTML = '';
+            updateSummary();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('📋 Suite de Pruebas Funcionales cargada');
+            console.log('Haz clic en "Ejecutar Todas las Pruebas" para comenzar');
+        });
+    </script>
+</body>
+</html>
