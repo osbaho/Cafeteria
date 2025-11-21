@@ -1,125 +1,84 @@
 # Virtual Cafeteria 🍽️
 
-Virtual cafeteria system for online orders
+A modern, responsive web application for ordering food and beverages online.
 
 ## Description
 
-Web platform for placing online orders at the cafeteria with features for:
-- Product catalog (beverages, food, desserts)
-- Interactive shopping cart
-- Multiple payment methods
-- Responsive and user-friendly interface
-- **🔒 Enterprise-level XSS security**
+Virtual Cafeteria is a web-based platform that allows users to browse a catalog of products, customize their orders, and simulate a checkout process. It features a clean, user-friendly interface with real-time search, filtering, and a dynamic shopping cart.
 
-## Features
+## Key Features
 
-### Product Catalog
-- **☕ Beverages**: Coffee, juices, tea, hot chocolate
-- **🍔 Food**: Sandwiches, hamburgers, salads, pasta, pizza
-- **🍰 Desserts**: Brownies, cheesecake, ice cream, tiramisu
+### 🛍️ Shopping Experience
 
-### Functionality
-- ✅ Add/remove products from cart
-- ✅ Adjust product quantities
-- ✅ Automatic total calculation
-- ✅ Payment method selection:
+- **Product Catalog**: Browse beverages, food, and desserts with visual cards.
+- **Search & Filter**: Instantly find products by name or category (Beverages, Food, Desserts).
+- **Customization**: Personalize items with ingredients (add/remove) and extra additions.
+- **Dynamic Cart**: Real-time updates, quantity adjustments, and total calculation.
+- **Mobile-First Design**: Fully responsive layout with a floating cart button for mobile devices.
+
+### 💳 Checkout & Payment
+
+- **Multiple Payment Methods**:
   - 💵 Cash
-  - 💳 Credit/Debit Card
+  - 💳 Credit/Debit Card (with input validation and auto-formatting)
   - 🏦 Bank Transfer
-  - 🔄 Virtual Account
-- ✅ Order confirmation
-- ✅ Responsive design (mobile and desktop)
-- ✅ WCAG 2.1 AA compliant accessibility
+  - 🔄 Virtual Account (with balance simulation)
+- **Order Confirmation**: Visual feedback upon successful order placement.
 
-### 🔒 Security
+### 🚀 Technical Highlights
 
-This application features **multiple layers of XSS protection**:
-- Content Security Policy (CSP)
-- HTTP security headers
-- Secure DOM manipulation (pure DOM API)
-- Automated security test suite
+- **Modern Architecture**: Separation of concerns with distinct HTML, CSS, and JavaScript files.
+- **SEO Optimized**: Includes meta tags, Open Graph, Twitter Cards, and JSON-LD structured data.
+- **Performance**: Implements lazy loading for images and resource preconnecting.
+- **Accessibility**: Semantic HTML, ARIA labels, and keyboard navigation support.
+- **Security**: Robust XSS protection via Content Security Policy (CSP) and secure DOM manipulation.
 
-📖 **See [SECURITY.md](SECURITY.md)** for complete security documentation
+## Installation & Usage
 
-## Usage
+No installation required! This is a static web application.
 
-1. Open the `index.html` file in your web browser
-2. Browse the product catalog organized by categories
-3. Click "Add to Cart" for the products you want
-4. Adjust quantities using the + and - buttons in the cart
-5. Select your preferred payment method
-6. Click "Complete Order" to confirm
-
-## Installation
-
-No installation required. Simply open the `index.html` file in any modern web browser:
+1. **Clone the repository** (or download the files).
+2. **Open `index.html`** in any modern web browser.
 
 ```bash
 # Option 1: Open directly
 open index.html
 
-# Option 2: Use a local server
+# Option 2: Use a local server (recommended for best experience)
+npx http-server .
+# OR
 python -m http.server 8000
-# Then visit http://localhost:8000
-
-# Option 3: With Node.js
-npx http-server
 ```
-
-## Security Tests
-
-To run the XSS security test suite:
-
-```bash
-# Start server
-python -m http.server 8000
-
-# Open in browser
-open http://localhost:8000/test-xss-security.html
-```
-
-The suite will run 25+ tests verifying all security layers.
-
-## Technologies
-
-- Semantic HTML5
-- CSS3 (with gradients, animations and section organization)
-- Vanilla JavaScript ES6+ (no dependencies)
-- Pure DOM API for maximum security
 
 ## Project Structure
 
 ```
 Cafeteria/
-├── index.html              # Main page with all functionality
-├── test-xss-security.html  # XSS security test suite
-├── test-functional.html    # Functional test suite
-├── SECURITY.md             # Complete security documentation
-├── README.md               # This file
-├── LICENSE                 # Project license
-└── .gitignore             # Files ignored by git
+├── index.html              # Main application entry point
+├── styles.css              # Global styles and responsive design
+├── script.js               # Application logic (Cart, Search, Modal)
+├── images/                 # Asset directory
+├── test-xss-security.html  # Security test suite
+├── SECURITY.md             # Security documentation
+└── README.md               # Project documentation
 ```
 
-## Screenshots
+## Technologies Used
 
-The interface includes:
-- Header with attractive gradient
-- Product section with interactive cards
-- Sticky side cart with quantity controls
-- Payment methods section
-- Visual notifications when adding products
+- **HTML5**: Semantic structure.
+- **CSS3**: Custom styling, Flexbox/Grid, Animations, Variables.
+- **JavaScript (ES6+)**: Vanilla JS for all interactivity (no frameworks).
 
 ## Security
 
-### Implemented Protection Layers:
+This project takes security seriously:
 
-1. **Content Security Policy (CSP)** - Restrictive policies
-2. **Security Headers** - X-Content-Type-Options, X-Frame-Options, etc.
-3. **DOM Manipulation** - 100% createElement + textContent
-4. **Automated Testing** - Suite with 25+ tests
+- **CSP**: Strict Content Security Policy implemented.
+- **Input Sanitization**: All user inputs are handled safely.
+- **DOM Safety**: Uses `textContent` and `createElement` to prevent XSS.
 
-See [SECURITY.md](SECURITY.md) for complete details.
+See [SECURITY.md](SECURITY.md) for more details.
 
 ## License
 
-See LICENSE file for more details.
+This project is open source and available under the [MIT License](LICENSE).
