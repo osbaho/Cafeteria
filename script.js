@@ -5,7 +5,7 @@ const products = {
             name: 'Latte',
             description: 'Creamy espresso with steamed milk',
             price: 3.50,
-            image: 'https://via.placeholder.com/400x300/667eea/ffffff?text=Latte',
+            image: 'images/latte.png',
             ingredients: [
                 { name: 'Espresso', required: true, removable: false, discount: 0 },
                 { name: 'Milk', required: true, removable: false, discount: 0 }
@@ -20,7 +20,7 @@ const products = {
             id: 3, 
             name: 'Cappuccino', 
             description: 'Espresso, milk and thick foam', 
-            image: 'https://via.placeholder.com/400x300/764ba2/ffffff?text=Cappuccino', 
+            image: 'images/cappuccino.png', 
             price: 3.50,
             ingredients: [
                 { name: 'Espresso', required: true, removable: false, discount: 0 },
@@ -38,7 +38,7 @@ const products = {
             id: 7, 
             name: 'Chicken Sandwich', 
             description: 'Grilled chicken breast with fresh vegetables', 
-            image: 'https://via.placeholder.com/400x300/ffc107/333333?text=Chicken+Sandwich', 
+            image: 'images/chicken-sandwich.png', 
             price: 8.50,
             ingredients: [
                 { name: 'Bread', required: true, removable: false, discount: 0 },
@@ -58,7 +58,7 @@ const products = {
             id: 8, 
             name: 'Hamburger', 
             description: 'Beef patty with cheese and fresh vegetables', 
-            image: 'https://via.placeholder.com/400x300/dc3545/ffffff?text=Hamburger', 
+            image: 'images/hamburger.png', 
             price: 10.00,
             ingredients: [
                 { name: 'Bread', required: true, removable: false, discount: 0 },
@@ -79,7 +79,7 @@ const products = {
             id: 11, 
             name: 'Personal Pizza', 
             description: 'Individual pizza with cheese and tomato sauce', 
-            image: 'https://via.placeholder.com/400x300/fd7e14/ffffff?text=Pizza', 
+            image: 'images/pizza.png', 
             price: 12.00,
             ingredients: [
                 { name: 'Dough', required: true, removable: false, discount: 0 },
@@ -100,7 +100,7 @@ const products = {
             id: 13, 
             name: 'Brownie', 
             description: 'Chocolate brownie with walnuts', 
-            image: 'https://via.placeholder.com/400x300/6f42c1/ffffff?text=Brownie', 
+            image: 'images/brownie.png', 
             price: 4.50,
             ingredients: [
                 { name: 'Brownie base', required: true, removable: false, discount: 0 },
@@ -116,7 +116,7 @@ const products = {
             id: 14, 
             name: 'Cheesecake', 
             description: 'Cream cheese tart with berry topping', 
-            image: 'https://via.placeholder.com/400x300/e83e8c/ffffff?text=Cheesecake', 
+            image: 'images/cheesecake.png', 
             price: 5.50,
             ingredients: [
                 { name: 'Cheese base', required: true, removable: false, discount: 0 },
@@ -782,5 +782,31 @@ function showNotification(message, duration = 2000) {
     }, duration);
 }
 
+// Scroll to Top Button
+function initScrollToTop() {
+    const scrollBtn = document.getElementById('scrollToTop');
+    
+    // Show/hide button based on scroll position
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollBtn.classList.add('visible');
+        } else {
+            scrollBtn.classList.remove('visible');
+        }
+    });
+    
+    // Smooth scroll to top when clicked
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
 // Initialize on page load
-window.onload = init;
+window.onload = function() {
+    init();
+    initScrollToTop();
+};
+
